@@ -1,7 +1,7 @@
-# Compiled class file
+# Compiled class files
 *.class
 
-# Log file
+# Log files
 *.log
 
 # BlueJ files
@@ -19,9 +19,56 @@
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# Virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
 
-# Kotlin Gradle plugin data, see https://kotlinlang.org/docs/whatsnew20.html#new-directory-for-kotlin-data-in-gradle-projects
+# Kotlin Gradle plugin data
 .kotlin/
+
+# Ignore Gradle project-specific cache directory
+.gradle/
+
+# Ignore Gradle build output directory
+build/
+
+# Ignore IntelliJ IDEA files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Ignore VS Code files (in case others use it)
+.vscode/
+
+# Ignore temporary files and directories
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Ignore generated files by the operating system
+Thumbs.db
+
+# Ignore Maven target directory (if applicable)
+target/
+
+# Ignore JetBrains annotations
+out/
+
+# Ignore logs and other non-relevant output
+logs/
+*.log
+
+# Ignore coverage and test results
+*.lcov
+*.coverage
+coverage/
+test-results/
+
+# Ignore Docker-related files (if you're using containers)
+docker-compose.override.yml
+*.env
+
+# Ignore temporary files by Gradle
+gradle-app.setting/
