@@ -17,6 +17,8 @@ fun main(args: Array<String>) {
         install(WebSockets)
     }
 
+    val clientDelay = 1000L
+
     runBlocking {
         client.webSocket(
             method = HttpMethod.Get,
@@ -31,6 +33,8 @@ fun main(args: Array<String>) {
                     val gameState = Json.decodeFromString<GameState>(frame.readText())
                     println("Received GameState: $gameState")
                     // calculate the delay from the timestamp until now
+                    // wait for clientDelay before sending the response
+                    delay(clientDelay)
                     val delay = Instant.now().toEpochMilli() - gameState.timestamp
 
                     // Send response back to the server

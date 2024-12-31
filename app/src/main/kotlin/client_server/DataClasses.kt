@@ -11,4 +11,7 @@ import java.time.Instant
 data class GameState(val tick: Int, val timestamp: Long)
 
 @Serializable
-data class AgentResponse(val tick: Int, val timestamp: Long, val agentId: String)
+data class AgentResponse(val tick: Int, val timestamp: Long, val agentId: String, val action: AgentAction = AgentAction())
+
+@Serializable
+data class AgentAction(val action: String = "DoNothing")
