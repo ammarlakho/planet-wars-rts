@@ -48,7 +48,7 @@ fun main() {
                             if (frame is Frame.Text) {
                                 val response = Json.decodeFromString<AgentResponse>(frame.readText())
                                 actions[clientId] = response.action
-                                println("Received response from $clientId: ${response.action}")
+                                println("Received response from ${response.agentId} : $clientId: ${response.action}")
                             }
                         }
                         delay(50) // Allow small buffer before proceeding
