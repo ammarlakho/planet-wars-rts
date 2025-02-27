@@ -10,20 +10,41 @@ class ForwardModel(val state: GameState, val params: GameParams) {
     // keep track of the total number of calls to the model across all instances
     companion object {
         var nUpdates = 0
+        var nFailedActions = 0
+        var nActions = 0
     }
 
     fun step(actions: Map<Player, Action>) {
         // increment the number of updates
-
+        applyActions(actions)
         updateTransporters()
         updatePlanets()
-
         nUpdates += 1
         state.gameTick++
+    }
 
-
-        // apply the actions to the game state
-//        state.applyActions(actions, params)
+    fun applyActions(actions: Map<Player, Action>) {
+        for ((player, action) in actions) {
+            // check if it's do nothing
+            if (action == Action.DO_NOTHING) {
+                continue
+            }
+            val source = state.planets[action.sourcePlanetId]
+            val target = state.planets[action.destinationPlanetId]
+            if (source.transporter == null && source.owner == player && source.nShips >= action.numShips) {
+                // launch a transporter
+                source.nShips -= action.numShips
+                source.pending[player] = source.pending[player]!! + action.numShips
+                val s = source.position
+                val t = target.position
+                val v = (t - s).normalize() * params.transporterSpeed
+                val transporter = Transporter(s, v, player, action.destinationPlanetId, action.numShips)
+                source.transporter = transporter
+                nActions += 1
+            } else {
+                nFailedActions += 1
+            }
+        }
     }
 
     fun isTerminal(): Boolean {

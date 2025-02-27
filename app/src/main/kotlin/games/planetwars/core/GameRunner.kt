@@ -9,7 +9,8 @@ data class GameRunner(
     val gameParams: GameParams,
 ) {
     fun runGame() : ForwardModel {
-        val forwardModel = ForwardModel(gameState, gameParams)
+        // runs with a fresh copy of the game state each time
+        val forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
         while (!forwardModel.isTerminal()) {
             val actions = mapOf(
                 Player.Player1 to agent1.getAction(gameState),
@@ -18,6 +19,16 @@ data class GameRunner(
             forwardModel.step(actions)
         }
         return forwardModel
+    }
+
+    fun runGames(nGames: Int) : Map<Player, Int> {
+        val scores = mutableMapOf(Player.Player1 to 0, Player.Player2 to 0, Player.Neutral to 0)
+        for (i in 0 until nGames) {
+            val finalModel = runGame()
+            val winner = finalModel.getLeader()
+            scores[winner] = scores[winner]!! + 1
+        }
+        return scores
     }
 }
 
@@ -30,5 +41,6 @@ fun main() {
     val finalModel = gameRunner.runGame()
     println("Game over!")
     println(finalModel.statusString())
-
+    val results = gameRunner.runGames(100)
+    println(results)
 }

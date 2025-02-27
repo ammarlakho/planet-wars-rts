@@ -29,6 +29,10 @@ data class Vec2d(val x: Double=0.0, val y: Double=0.0) {
 
     // convenience for legacy code
     fun rotatedBy(theta: Double) = rotate(theta)
+    fun normalize(): Vec2d {
+        val m = mag()
+        return if (m > 0.0) this * (1.0 / m) else this
+    }
 
 }
 
