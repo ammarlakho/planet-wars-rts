@@ -8,9 +8,12 @@ data class GameRunner(
     val agent2: PlanetWarsAgent,
     val gameParams: GameParams,
 ) {
+    var forwardModel: ForwardModel = ForwardModel(gameState.deepCopy(), gameParams)
+
     fun runGame() : ForwardModel {
         // runs with a fresh copy of the game state each time
-        val forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
+//        val forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
+        forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
         while (!forwardModel.isTerminal()) {
             val actions = mapOf(
                 Player.Player1 to agent1.getAction(gameState),
@@ -18,6 +21,22 @@ data class GameRunner(
             )
             forwardModel.step(actions)
         }
+        return forwardModel
+    }
+
+    fun newGame() {
+        forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
+    }
+
+    fun stepGame() : ForwardModel {
+        if (forwardModel.isTerminal()) {
+            return forwardModel
+        }
+        val actions = mapOf(
+            Player.Player1 to agent1.getAction(gameState),
+            Player.Player2 to agent2.getAction(gameState),
+        )
+        forwardModel.step(actions)
         return forwardModel
     }
 
@@ -33,14 +52,19 @@ data class GameRunner(
 }
 
 fun main() {
-    val gameParams = GameParams()
+    val gameParams = GameParams(numPlanets = 20)
     val gameState = GameStateFactory(gameParams).createGame()
-    val agent1 = games.planetwars.agents.PureRandomAgent(Player.Player1)
+    val agent1 = games.planetwars.agents.CarefulRandomAgent(Player.Player1)
     val agent2 = games.planetwars.agents.PureRandomAgent(Player.Player2)
     val gameRunner = GameRunner(gameState, agent1, agent2, gameParams)
     val finalModel = gameRunner.runGame()
     println("Game over!")
     println(finalModel.statusString())
-    val results = gameRunner.runGames(100)
+    // time to run a bunch of games
+    val nGames = 1000
+    val t = System.currentTimeMillis()
+    val results = gameRunner.runGames(nGames)
+    val dt = System.currentTimeMillis() - t
     println(results)
+    println("Time per game: ${dt.toDouble() / nGames} ms")
 }
