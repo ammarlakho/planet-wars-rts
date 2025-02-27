@@ -1,9 +1,6 @@
 package games.planetwars.view
 
-import games.planetwars.core.GameParams
-import games.planetwars.core.GameRunner
-import games.planetwars.core.GameState
-import games.planetwars.core.GameStateFactory
+import games.planetwars.core.*
 import util.Vec2d
 import xkg.gui.*
 import xkg.jvm.AppLauncher
@@ -44,17 +41,37 @@ class GameView (
         }
     }
 
+    private fun drawTransporter(xg: XGraphics, transporter: Transporter) {
+        // define the shape of the ship
+//         static int[] xp = {-2, 0, 2, 0};
+//        static int[] yp = {2, -2, 2, 0};
+        val scale = 2.0 * transporter.nShips
+        val points = arrayListOf(
+            Vec2d(-2.0, 2.0) * scale,
+            Vec2d(0.0, -2.0) * scale,
+            Vec2d(2.0, 2.0) * scale,
+            Vec2d(0.0, 0.0) * scale,
+        )
+
+        val color = colors.getColor(transporter.owner)
+        val size = 20.0
+        val circle = XEllipse(
+            transporter.s,
+            size, size,
+            XStyle(fg = color, fill = true))
+        xg.draw(circle)
+
+        val xPoly = XPoly(transporter.s, points, XStyle(fg = colors.getColor(transporter.owner), fill = true))
+        xg.draw(xPoly)
+
+
+    }
+
     private fun drawTransporters(xg: XGraphics) {
         for (planet in gameState.planets) {
             val transporter = planet.transporter
             if (transporter != null) {
-                val color = colors.getColor(transporter.owner)
-                val size = 20.0
-                val circle = XEllipse(
-                    transporter.s,
-                    size, size,
-                    XStyle(fg = color, fill = true))
-                xg.draw(circle)
+                drawTransporter(xg, transporter)
             }
         }
     }

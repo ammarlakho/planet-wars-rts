@@ -12,7 +12,7 @@ data class GameParams (
     val minGrowthRate: Double = 0.1,
     val maxGrowthRate: Double = 0.5,
     val growthToRadiusFactor: Double = 100.0,
-    val transporterSpeed: Double = 0.1
+    val transporterSpeed: Double = 1.0
 ){
 
 }
