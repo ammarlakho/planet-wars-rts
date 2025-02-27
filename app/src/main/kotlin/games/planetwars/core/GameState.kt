@@ -38,7 +38,7 @@ data class Transporter (
 
 data class GameState (
     val planets: List<Planet>,  // list of planets does not change in a given game
-//    val transporters: MutableList<Transporter> = mutableListOf(),
+    var gameTick: Int=0,
 ){
 
 }

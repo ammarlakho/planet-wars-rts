@@ -1,5 +1,7 @@
 package games.planetwars.core
 
+import games.planetwars.agents.Action
+
 class ForwardModel(val state: GameState, val params: GameParams) {
     // the forward model applies the current set of actions to the current game state
     // and updates the game state in place
@@ -9,6 +11,46 @@ class ForwardModel(val state: GameState, val params: GameParams) {
     companion object {
         var nUpdates = 0
     }
+
+    fun step(actions: Map<Player, Action>) {
+        // increment the number of updates
+
+        updateTransporters()
+        updatePlanets()
+
+        nUpdates += 1
+        state.gameTick++
+
+
+        // apply the actions to the game state
+//        state.applyActions(actions, params)
+    }
+
+    fun isTerminal(): Boolean {
+        // the game is terminal if one of the players has no planets
+        if (state.gameTick > params.maxTicks) {
+            return true
+        }
+        return state.planets.none { it.owner == Player.Player1 } || state.planets.none { it.owner == Player.Player2 }
+    }
+
+    fun statusString() : String {
+        return "Game tick: ${state.gameTick}; Player 1: ${getShips(Player.Player1)}; Player 2: ${getShips(Player.Player2)}; Leader: ${getLeader()}"
+    }
+
+    fun getShips(player: Player): Int {
+        return state.planets.filter { it.owner == player }.sumOf { it.nShips }
+    }
+
+    fun getLeader(): Player {
+        val s1 = getShips(Player.Player1)
+        val s2 = getShips(Player.Player2)
+        if (s1 == s2) {
+            return Player.Neutral
+        }
+        return if (s1 > s2) Player.Player1 else Player.Player2
+    }
+
 
     fun transporterArrival(destination: Planet, transporter: Transporter) {
         // process an arriving transporter
@@ -87,17 +129,6 @@ class ForwardModel(val state: GameState, val params: GameParams) {
         }
     }
 
-    fun step(actions: Map<Player, Action>) {
-        // increment the number of updates
-
-        updateTransporters()
-        nUpdates += 1
-        updatePlanets()
-
-
-        // apply the actions to the game state
-//        state.applyActions(actions, params)
-    }
 
 }
 
