@@ -5,7 +5,7 @@ import games.planetwars.core.GameState
 import games.planetwars.core.GameStateFactory
 import games.planetwars.core.Player
 
-class RandomAgent(val player: Player) : PlanetWarsAgent {
+class CarefulRandomAgent(val player: Player) : PlanetWarsAgent {
     override fun getAction(gameState: GameState): Action {
         // filter the planets that are owned by the player AND have a transporter available
         val myPlanets = gameState.planets.filter { it.owner == player && it.transporter == null }
@@ -29,7 +29,7 @@ class RandomAgent(val player: Player) : PlanetWarsAgent {
 }
 
 fun main() {
-    val agent = RandomAgent(Player.Player1)
+    val agent = CarefulRandomAgent(Player.Player1)
     val gameState = GameStateFactory(GameParams()).createGame()
     val action = agent.getAction(gameState)
     println(action)
