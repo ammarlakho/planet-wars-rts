@@ -16,8 +16,14 @@ class JEasyFrame(var comp: Component, title: String) : JFrame(title) {
     }
 }
 
-class AppLauncher (val app: XApp, var frameRate: Double = 25.0, title: String = "Capture the Flag"){
-    val ec = EasyComponent()
+class AppLauncher(
+    val app: XApp,
+    var frameRate: Double = 25.0,
+    title: String = "Capture the Flag",
+    val preferredWidth: Int = 640,
+    val preferredHeight: Int = 480,
+) {
+    val ec = EasyComponent(preferredWidth, preferredHeight)
     val frame = JEasyFrame(ec, title)
     val xg = XGraphicsJVM(ec)
 
@@ -37,6 +43,7 @@ class AppLauncher (val app: XApp, var frameRate: Double = 25.0, title: String = 
             Thread.sleep(delay.toLong())
         }
     }
+
     companion object {
         var globFrameRate = 25.0
     }

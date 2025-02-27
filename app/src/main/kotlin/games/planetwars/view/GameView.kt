@@ -23,10 +23,10 @@ class GameView (
 
         for (planet in gameState.planets) {
             val color = colors.getColor(planet.owner)
-            val radius = params.growthToRadiusFactor * planet.growthRate
+            val size = 2 * planet.radius
             val circle = XEllipse(
                 planet.position,
-                radius, radius,
+                size, size,
                 XStyle(fg = color, fill = true))
             xg.draw(circle)
         }
@@ -43,8 +43,19 @@ class GameView (
 }
 
 fun main() {
-    val params = GameParams()
+    val params = GameParams(
+        numPlanets = 10,
+        initialNeutralRatio = 0.3,
+        height = 200,
+    )
     val gameState = GameStateFactory(params).createGame()
+    for (planet in gameState.planets) {
+        println(planet)
+    }
     val title = "Planet Wars"
-    AppLauncher(GameView(gameState), title = title).launch()
+    AppLauncher(
+        preferredWidth = params.width,
+        preferredHeight = params.height,
+        app = GameView(params = params, gameState = gameState),
+        title = title).launch()
 }

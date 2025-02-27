@@ -12,6 +12,7 @@ data class Planet (
     var nShips: Int,
     val position: Vec2d,
     val growthRate: Double,
+    val radius: Double,
 )
 
 data class Transporter(
