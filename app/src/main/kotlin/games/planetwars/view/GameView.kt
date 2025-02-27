@@ -48,22 +48,16 @@ class GameView (
         val scale = 2.0 * transporter.nShips
         val points = arrayListOf(
             Vec2d(-2.0, 2.0) * scale,
-            Vec2d(0.0, -2.0) * scale,
-            Vec2d(2.0, 2.0) * scale,
             Vec2d(0.0, 0.0) * scale,
+            Vec2d(-2.0, -2.0) * scale,
+            Vec2d(2.0, 0.0) * scale,
         )
 
         val color = colors.getColor(transporter.owner)
-        val size = 20.0
-        val circle = XEllipse(
-            transporter.s,
-            size, size,
-            XStyle(fg = color, fill = true))
-        xg.draw(circle)
 
-        val xPoly = XPoly(transporter.s, points, XStyle(fg = colors.getColor(transporter.owner), fill = true))
+        val xPoly = XPoly(transporter.s, points, XStyle(fg = color, fill = true))
+        xPoly.rotation = transporter.v.angle()
         xg.draw(xPoly)
-
 
     }
 

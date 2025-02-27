@@ -20,6 +20,8 @@ data class Vec2d(val x: Double=0.0, val y: Double=0.0) {
 
     fun distance(v: Vec2d) = (this - v).mag()
 
+    fun angle() = Math.atan2(y, x)
+
     fun rotate(angle: Double): Vec2d {
         return Vec2d(
             this.x * cos(angle) - this.y * sin(angle),
