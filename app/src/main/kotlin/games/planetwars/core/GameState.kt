@@ -10,6 +10,8 @@ enum class Player {
 data class Planet (
     var owner: Player,
     var nShips: Int,
+    val position: Vec2d,
+    val growthRate: Double,
 )
 
 data class Transporter(
@@ -19,7 +21,8 @@ data class Transporter(
 
 }
 
-data class GameState (val planets: List<Planet>){
-    // can have game state as a list of planets?
+data class GameState (
+    val planets: List<Planet>,
+){
 
 }
