@@ -66,6 +66,10 @@ class GameStateFactory (val params: GameParams) {
         // now add the reflected planets to the main list
         planets.addAll(reflectedPlanets)
 
+        // now number the ids
+        for ((i, planet) in planets.withIndex()) {
+            planet.id = i
+        }
         return GameState(planets)
     }
 }
