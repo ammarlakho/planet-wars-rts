@@ -21,6 +21,7 @@ fun main() {
 
 
     val finalModel = gameRunner.runGame()
+    gameRunner.runGames(10)
     println(finalModel.statusString())
 
 

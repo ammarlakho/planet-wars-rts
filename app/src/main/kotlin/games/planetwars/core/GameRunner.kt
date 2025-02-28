@@ -16,8 +16,8 @@ data class GameRunner(
         forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
         while (!forwardModel.isTerminal()) {
             val actions = mapOf(
-                Player.Player1 to agent1.getAction(gameState),
-                Player.Player2 to agent2.getAction(gameState),
+                Player.Player1 to agent1.getAction(forwardModel.state.deepCopy()),
+                Player.Player2 to agent2.getAction(forwardModel.state.deepCopy()),
             )
             forwardModel.step(actions)
         }
@@ -33,8 +33,8 @@ data class GameRunner(
             return forwardModel
         }
         val actions = mapOf(
-            Player.Player1 to agent1.getAction(gameState),
-            Player.Player2 to agent2.getAction(gameState),
+            Player.Player1 to agent1.getAction(forwardModel.state),
+            Player.Player2 to agent2.getAction(forwardModel.state),
         )
         forwardModel.step(actions)
         return forwardModel
@@ -56,8 +56,8 @@ data class GameRunner(
 fun main() {
     val gameParams = GameParams(numPlanets = 20)
     val gameState = GameStateFactory(gameParams).createGame()
-    val agent1 = games.planetwars.agents.CarefulRandomAgent(Player.Player1)
-    val agent2 = games.planetwars.agents.BetterRandomAgent(Player.Player2)
+    val agent1 = games.planetwars.agents.PureRandomAgent(Player.Player1)
+    val agent2 = games.planetwars.agents.CarefulRandomAgent(Player.Player2)
     val gameRunner = GameRunner(gameState, agent1, agent2, gameParams)
     val finalModel = gameRunner.runGame()
     println("Game over!")
