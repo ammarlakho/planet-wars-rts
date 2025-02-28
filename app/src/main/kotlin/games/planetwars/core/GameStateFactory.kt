@@ -9,7 +9,7 @@ class GameStateFactory (val params: GameParams) {
         val x = (Math.random() * params.width / 2).toInt()
         val y = (Math.random() * params.height).toInt()
         val numShips = (Math.random() * (params.maxInitialShipsPerPlanet - params.minInitialShipsPerPlanet)
-                + params.minInitialShipsPerPlanet).toInt()
+                + params.minInitialShipsPerPlanet)
         val growthRate = Math.random() * (params.maxGrowthRate - params.minGrowthRate) + params.minGrowthRate
         val radius = growthRate * params.growthToRadiusFactor
         return Planet(owner, numShips, Vec2d(x.toDouble(), y.toDouble()), growthRate, radius)

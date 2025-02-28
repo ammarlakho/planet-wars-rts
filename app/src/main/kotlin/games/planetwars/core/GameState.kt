@@ -22,7 +22,7 @@ data class Planet (
     val growthRate: Double,
     val radius: Double,
     var transporter: Transporter? = null, // null means we're free to create one, otherwise it's in transit and not available
-    val pending: MutableMap<Player, Int> = mutableMapOf(Player.Player1 to 0, Player.Player2 to 0),
+    val pending: MutableMap<Player, Double> = mutableMapOf(Player.Player1 to 0.0, Player.Player2 to 0.0),
     var id: Int = -1,  // will be more convenient to set id later
 )
 
@@ -31,7 +31,7 @@ data class Transporter (
     var v: Vec2d,
     val owner: Player,
     val destinationIndex: Int,
-    val nShips: Int,
+    val nShips: Double,
 ) {
 
 }
@@ -79,9 +79,9 @@ fun main() {
             v = Vec2d(1.0, 1.0),
             owner = Player.Player1,
             destinationIndex = 0,
-            nShips = 10
+            nShips = 10.0
         ),
-        pending = mutableMapOf(Player.Player1 to 5, Player.Player2 to 3),
+        pending = mutableMapOf(Player.Player1 to 5.0, Player.Player2 to 3.0),
         id = 1
     )
 
@@ -95,7 +95,7 @@ fun main() {
 //    gameState.planets[0].position = Vec2d(200.0, 300.0)
     gameState.planets[0].owner = Player.Player2
 //    gameState.planets[0].transporter?.nShips = 20
-    gameState.planets[0].pending[Player.Player1] = 99
+    gameState.planets[0].pending[Player.Player1] = 99.0
     gameState.gameTick = 10
 
     // Output both the original and the copied state to compare

@@ -9,10 +9,10 @@ data class GameParams (
     val radialSeparation: Double = 1.5,  // separation between planets
     val minInitialShipsPerPlanet: Int = 5,
     val maxInitialShipsPerPlanet: Int = 20,
-    val minGrowthRate: Double = 0.1,
-    val maxGrowthRate: Double = 0.5,
+    val minGrowthRate: Double = 0.05,
+    val maxGrowthRate: Double = 0.25,
     val growthToRadiusFactor: Double = 100.0,
-    val transporterSpeed: Double = 1.0
+    val transporterSpeed: Double = 2.0
 ){
 
 }

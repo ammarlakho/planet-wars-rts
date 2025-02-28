@@ -59,7 +59,7 @@ class ForwardModel(val state: GameState, val params: GameParams) {
         return "Game tick: ${state.gameTick}; Player 1: ${getShips(Player.Player1)}; Player 2: ${getShips(Player.Player2)}; Leader: ${getLeader()}"
     }
 
-    fun getShips(player: Player): Int {
+    fun getShips(player: Player): Double {
         return state.planets.filter { it.owner == player }.sumOf { it.nShips }
     }
 
@@ -126,9 +126,9 @@ class ForwardModel(val state: GameState, val params: GameParams) {
         planet.nShips += planet.growthRate
         // resolve any pending ships on the planet
         planet.nShips += planet.pending[planet.owner]!!
-        planet.pending[planet.owner] = 0
+        planet.pending[planet.owner] = 0.0
         planet.nShips -= planet.pending[planet.owner.opponent()]!!
-        planet.pending[planet.owner.opponent()] = 0
+        planet.pending[planet.owner.opponent()] = 0.0
         // we check if it has switched ownership
         if (planet.nShips < 0) {
             planet.owner = planet.owner.opponent()
