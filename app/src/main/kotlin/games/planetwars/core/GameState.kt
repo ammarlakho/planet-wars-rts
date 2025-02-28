@@ -17,7 +17,7 @@ enum class Player {
 
 data class Planet (
     var owner: Player,
-    var nShips: Int,
+    var nShips: Double, // need to support fractional ships for easy calculations
     val position: Vec2d,
     val growthRate: Double,
     val radius: Double,
@@ -70,7 +70,7 @@ fun main() {
     // Create an initial GameState with one planet and a transporter
     val planet = Planet(
         owner = Player.Player1,
-        nShips = 50,
+        nShips = 50.0,
         position = Vec2d(100.0, 200.0),
         growthRate = 1.5,
         radius = 20.0,
@@ -91,7 +91,7 @@ fun main() {
     val copiedState = gameState.deepCopy()
 
     // Modify the original state to check if the copy remains unaffected
-    gameState.planets[0].nShips = 100
+    gameState.planets[0].nShips = 100.0
 //    gameState.planets[0].position = Vec2d(200.0, 300.0)
     gameState.planets[0].owner = Player.Player2
 //    gameState.planets[0].transporter?.nShips = 20

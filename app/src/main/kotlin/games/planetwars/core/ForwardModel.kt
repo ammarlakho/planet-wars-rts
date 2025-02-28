@@ -123,7 +123,7 @@ class ForwardModel(val state: GameState, val params: GameParams) {
 
     private fun updatePlayerPlanet(planet: Planet) {
         // this is simple:
-        planet.nShips += planet.growthRate.toInt()
+        planet.nShips += planet.growthRate
         // resolve any pending ships on the planet
         planet.nShips += planet.pending[planet.owner]!!
         planet.pending[planet.owner] = 0
