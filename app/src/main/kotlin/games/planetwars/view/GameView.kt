@@ -39,6 +39,10 @@ class GameView (
                 size, size,
                 XStyle(fg = color, fill = true))
             xg.draw(circle)
+            // draw the number of ships
+            val tStyle = TStyle(fg = colors.text, size = 14.0)
+            val text = XText("${planet.nShips.toInt()}", planet.position, tStyle)
+            xg.draw(text)
         }
     }
 
@@ -46,7 +50,7 @@ class GameView (
         // define the shape of the ship
 //         static int[] xp = {-2, 0, 2, 0};
 //        static int[] yp = {2, -2, 2, 0};
-        val scale = 2.0 * transporter.nShips
+        val scale = 5.0
         val points = arrayListOf(
             Vec2d(-2.0, 2.0) * scale,
             Vec2d(0.0, 0.0) * scale,
@@ -59,6 +63,11 @@ class GameView (
         val xPoly = XPoly(transporter.s, points, XStyle(fg = color, fill = true))
         xPoly.rotation = transporter.v.angle()
         xg.draw(xPoly)
+
+        // draw the number of ships, but not rotated
+        val tStyle = TStyle(fg = colors.text, size = 14.0)
+        val text = XText("${transporter.nShips.toInt()}", transporter.s, tStyle)
+        xg.draw(text)
 
     }
 

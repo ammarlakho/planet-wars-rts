@@ -5,8 +5,6 @@ import games.planetwars.agents.Action
 class ForwardModel(val state: GameState, val params: GameParams) {
     // the forward model applies the current set of actions to the current game state
     // and updates the game state in place
-
-
     // keep track of the total number of calls to the model across all instances
     companion object {
         var nUpdates = 0
@@ -55,8 +53,8 @@ class ForwardModel(val state: GameState, val params: GameParams) {
         return state.planets.none { it.owner == Player.Player1 } || state.planets.none { it.owner == Player.Player2 }
     }
 
-    fun statusString() : String {
-        return "Game tick: ${state.gameTick}; Player 1: ${getShips(Player.Player1)}; Player 2: ${getShips(Player.Player2)}; Leader: ${getLeader()}"
+    fun statusString(): String {
+        return "Game tick: ${state.gameTick}; Player 1: ${getShips(Player.Player1).toInt()}; Player 2: ${getShips(Player.Player2).toInt()}; Leader: ${getLeader()}"
     }
 
     fun getShips(player: Player): Double {
@@ -149,8 +147,6 @@ class ForwardModel(val state: GameState, val params: GameParams) {
             }
         }
     }
-
-
 }
 
 fun main() {
