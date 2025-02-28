@@ -24,7 +24,7 @@ class CarefulRandomAgent(val player: Player) : PlanetWarsAgent {
     }
 
     override fun getAgentType(): String {
-        return "RandomAgent"
+        return "Careful Random Agent"
     }
 }
 

@@ -27,6 +27,7 @@ class GameView (
         drawBackground(xg)
         drawPlanets(xg)
         drawTransporters(xg)
+        drawStatus(xg)
     }
 
     private fun drawPlanets(xg: XGraphics) {
@@ -77,6 +78,15 @@ class GameView (
         xg.draw(rect)
     }
 
+    private fun drawStatus(xg: XGraphics) {
+        val runner = gameRunner
+        if (runner != null) {
+            val status = runner.forwardModel.statusString()
+            val tStyle = TStyle(fg = colors.text, size = 14.0)
+            val text = XText("Game status: $status", Vec2d(xg.width()/2, 20.0), tStyle)
+            xg.draw(text)
+        }
+    }
 }
 
 fun main() {

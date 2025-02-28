@@ -8,6 +8,7 @@ data class ColorScheme(
     val neutral: XColor = XColor.gray,
     val playerOne: XColor = XColor.red,
     val playerTwo: XColor = XColor.blue,
+    val text: XColor = XColor.white
 ) {
 
     fun getColor(player: Player): XColor {

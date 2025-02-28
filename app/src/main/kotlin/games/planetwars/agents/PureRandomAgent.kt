@@ -13,7 +13,7 @@ class PureRandomAgent(val player: Player) : PlanetWarsAgent {
     }
 
     override fun getAgentType(): String {
-        return "RandomAgent"
+        return "Pure Random Agent"
     }
 }
 
