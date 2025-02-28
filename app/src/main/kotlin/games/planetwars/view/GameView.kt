@@ -1,6 +1,7 @@
 package games.planetwars.view
 
 import games.planetwars.core.*
+import games.planetwars.runners.GameRunner
 import util.Vec2d
 import xkg.gui.*
 import xkg.jvm.AppLauncher

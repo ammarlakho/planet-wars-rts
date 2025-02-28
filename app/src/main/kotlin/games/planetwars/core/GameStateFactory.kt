@@ -17,11 +17,13 @@ class GameStateFactory (val params: GameParams) {
 
     fun canAdd(planets: List<Planet>, candidate: Planet, radialSeparation: Double) : Boolean {
         // check they are not too close to the edge
-        val radSep = params.radialSeparation * candidate.radius
-        if (candidate.position.x - radSep < 0 || candidate.position.x + radSep > params.width / 2) {
+        val edgeSep = params.edgeSeparation
+        if (candidate.position.x - edgeSep < candidate.radius ||
+            candidate.position.x + edgeSep > params.width / 2 - candidate.radius) {
             return false
         }
-        if (candidate.position.y - radSep < 0 || candidate.position.y + radSep > params.height) {
+        if (candidate.position.y - edgeSep < candidate.radius ||
+            candidate.position.y + edgeSep > params.height - candidate.radius) {
             return false
         }
         for (planet in planets) {

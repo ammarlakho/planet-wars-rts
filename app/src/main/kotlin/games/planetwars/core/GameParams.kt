@@ -1,18 +1,22 @@
 package games.planetwars.core
 
 data class GameParams (
+    // spatial parameters
     val width: Int = 640,
     val height: Int = 480,
+    val edgeSeparation: Double = 25.0,  // separation between planet and edge of screen: same units as width and height
+    val radialSeparation: Double = 1.5,  // separation between planets
+    val growthToRadiusFactor: Double = 200.0,
+
+    // game parameters
     val numPlanets: Int = 10,
     val initialNeutralRatio: Double = 0.5,
     val maxTicks: Int = 2000,
-    val radialSeparation: Double = 1.5,  // separation between planets
     val minInitialShipsPerPlanet: Int = 5,
     val maxInitialShipsPerPlanet: Int = 20,
-    val minGrowthRate: Double = 0.05,
-    val maxGrowthRate: Double = 0.25,
-    val growthToRadiusFactor: Double = 100.0,
-    val transporterSpeed: Double = 2.0
+    val minGrowthRate: Double = 0.02,
+    val maxGrowthRate: Double = 0.1,
+    val transporterSpeed: Double = 3.0
 ){
 
 }

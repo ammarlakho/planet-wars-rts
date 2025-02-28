@@ -1,6 +1,7 @@
-package games.planetwars.core
+package games.planetwars.runners
 
 import games.planetwars.agents.PlanetWarsAgent
+import games.planetwars.core.*
 
 data class GameRunner(
     val gameState: GameState,
