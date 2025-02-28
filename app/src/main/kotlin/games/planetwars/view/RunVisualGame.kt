@@ -15,7 +15,8 @@ fun main() {
     val gameState = GameStateFactory(gameParams).createGame()
     val agent2 = games.planetwars.agents.CarefulRandomAgent(Player.Player2)
 //    val agent1 = games.planetwars.agents.PureRandomAgent(Player.Player1)
-    val agent1 = games.planetwars.agents.DoNothingAgent()
+//    val agent1 = games.planetwars.agents.DoNothingAgent()
+    val agent1 = games.planetwars.agents.BetterRandomAgent(Player.Player1)
     val gameRunner = GameRunner(gameState, agent1, agent2, gameParams)
 
     val title = "Planet Wars"

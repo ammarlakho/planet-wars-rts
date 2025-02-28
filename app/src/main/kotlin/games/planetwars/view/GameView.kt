@@ -22,7 +22,7 @@ class GameView (
                 runner.newGame()
             }
             gameState = runner.stepGame().state
-            println(runner.forwardModel.statusString())
+//            println(runner.forwardModel.statusString())
         }
         drawBackground(xg)
         drawPlanets(xg)

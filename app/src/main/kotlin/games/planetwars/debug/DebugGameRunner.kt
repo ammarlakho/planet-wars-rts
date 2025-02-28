@@ -1,9 +1,11 @@
-package games.planetwars.core
+package games.planetwars.debug
+
+import games.planetwars.core.*
 
 import games.planetwars.agents.PlanetWarsAgent
 
-data class GameRunner(
-    val gameState: GameState,
+data class DebugGameRunner(
+    var gameState: GameState,
     val agent1: PlanetWarsAgent,
     val agent2: PlanetWarsAgent,
     val gameParams: GameParams,
@@ -13,6 +15,7 @@ data class GameRunner(
     fun runGame() : ForwardModel {
         // runs with a fresh copy of the game state each time
 //        val forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
+        gameState = GameStateFactory(gameParams).createGame()
         forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
         while (!forwardModel.isTerminal()) {
             val actions = mapOf(
@@ -25,7 +28,8 @@ data class GameRunner(
     }
 
     fun newGame() {
-        forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
+        gameState = GameStateFactory(gameParams).createGame()
+        forwardModel = ForwardModel(gameState, gameParams)
     }
 
     fun stepGame() : ForwardModel {
@@ -58,7 +62,7 @@ fun main() {
     val gameState = GameStateFactory(gameParams).createGame()
     val agent1 = games.planetwars.agents.CarefulRandomAgent(Player.Player1)
     val agent2 = games.planetwars.agents.BetterRandomAgent(Player.Player2)
-    val gameRunner = GameRunner(gameState, agent1, agent2, gameParams)
+    val gameRunner = DebugGameRunner(gameState, agent1, agent2, gameParams)
     val finalModel = gameRunner.runGame()
     println("Game over!")
     println(finalModel.statusString())
