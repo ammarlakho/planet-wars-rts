@@ -7,10 +7,13 @@ class League {
 
 data class LeagueEntry(
     val agentName: String,
-    val nWins: Int,
-    val nLosses: Int,
-    val nDraws: Int,
-)
+    var points: Double = 0.0,
+    var nGames: Int = 0,
+) {
+    fun winRate(): Double {
+        return 100 * points  / nGames
+    }
+}
 
 data class LeagueResult(
     val entries: List<LeagueEntry>
@@ -19,14 +22,12 @@ data class LeagueResult(
 fun generateMarkdownTable(league: LeagueResult): String {
     // Sort by wins (descending), then losses (ascending), then draws (descending)
     val sortedEntries = league.entries.sortedWith(
-        compareByDescending<LeagueEntry> { it.nWins }
-            .thenBy { it.nLosses }
-            .thenByDescending { it.nDraws }
+        compareByDescending<LeagueEntry> { it.winRate() }
     )
 
-    val header = "| Rank | Agent Name | Wins | Losses | Draws |\n|------|------------|------|--------|-------|\n"
+    val header = "| Rank | Agent Name | Played | Win Rate |\n|------|------------|------|-------|\n"
     val rows = sortedEntries.mapIndexed { index, entry ->
-        "| ${index + 1} | ${entry.agentName} | ${entry.nWins} | ${entry.nLosses} | ${entry.nDraws} |"
+        "| ${index + 1} | ${entry.agentName} | ${entry.winRate()} | ${entry.nGames} |"
     }.joinToString("\n")
 
     return header + rows
@@ -47,10 +48,10 @@ fun saveMarkdownToFile(markdownContent: String, outputDir: String, filename: Str
 fun main() {
     val league = LeagueResult(
         listOf(
-            LeagueEntry("AlphaBot", 10, 2, 1),
-            LeagueEntry("BetaAI", 8, 4, 2),
-            LeagueEntry("GammaSolver", 8, 3, 3),
-            LeagueEntry("DeltaAgent", 6, 5, 3)
+            LeagueEntry("AlphaBot", 10.0, 20),
+            LeagueEntry("BetaAI", 8.0, 4),
+            LeagueEntry("GammaSolver", 8.0, 3),
+            LeagueEntry("DeltaAgent", 6.0, 5)
         )
     )
 
