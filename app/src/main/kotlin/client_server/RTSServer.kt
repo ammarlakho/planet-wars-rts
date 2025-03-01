@@ -40,7 +40,7 @@ fun main() {
                         }
                     }
                     tick++
-                    delay(delayMillis) // simulate game tick delay
+                    delay(delayMillis) // simulate game tick delayMillis
                 }
             }
         }

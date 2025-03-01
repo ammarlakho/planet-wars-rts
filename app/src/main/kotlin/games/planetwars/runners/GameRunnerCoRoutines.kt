@@ -39,6 +39,38 @@ data class GameRunnerCoRoutines(
         val scope = CoroutineScope(coroutineContext + job)
 
         try {
+            val action1 = scope.async(Dispatchers.Default) {
+                latestAction1 = agent1.getAction(state.deepCopy()) // Runs in a background thread
+                latestAction1
+            }
+
+            val action2 = scope.async(Dispatchers.Default) {
+                latestAction2 = agent2.getAction(state.deepCopy()) // Runs in a background thread
+                latestAction2
+            }
+
+            // Only wait for timeoutMillis for the agent actions, but do not cancel if they take longer
+            val action1Result = withTimeoutOrNull(timeoutMillis) { action1.await() } ?: doNothingAction
+            val action2Result = withTimeoutOrNull(timeoutMillis) { action2.await() } ?: doNothingAction
+
+            mapOf(
+                Player.Player1 to action1Result,
+                Player.Player2 to action2Result
+            )
+        } finally {
+            // Ensure any remaining jobs are cancelled when the game terminates
+            job.cancelChildren()
+        }
+    }
+
+    suspend fun getTimedActionsOld(state: GameState): Map<Player, Action> = coroutineScope {
+        val doNothingAction = Action.doNothing()
+
+        // Create a supervisor scope to manage child jobs independently
+        val job = SupervisorJob()
+        val scope = CoroutineScope(coroutineContext + job)
+
+        try {
             val action1 = scope.async {
                 latestAction1 = agent1.getAction(state.deepCopy())
                 latestAction1
@@ -101,14 +133,15 @@ fun main() {
     val gameState = GameStateFactory(gameParams).createGame()
     val agent1 = games.planetwars.agents.PureRandomAgent(Player.Player1)
 //    val agent2 = games.planetwars.agents.BetterRandomAgent(Player.Player2)
-    val agent2 = games.planetwars.agents.SlowRandomAgent(Player.Player2, delayMillis = 20)
+    val agent2 = games.planetwars.agents.SlowRandomAgent(Player.Player2, delayMillis = 1000)
+//    val agent2 = games.planetwars.agents.HeavyRandomAgent(Player.Player2, delayMillis = 1000)
     val gameRunner = GameRunnerCoRoutines(gameState, agent1, agent2, gameParams, timeoutMillis = 1)
     val finalModel = gameRunner.runGame()
     println("Game over!")
     println(finalModel.statusString())
 
     // time to run a bunch of games
-    val nGames = 1
+    val nGames = 10
     val results = gameRunner.runGames(nGames)
     println(results)
 }

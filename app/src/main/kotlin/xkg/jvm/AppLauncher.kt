@@ -39,7 +39,7 @@ class AppLauncher(
         while (true) {
             ec.repaint()
             val delay = 1000 / globFrameRate
-//            println("Delay = $delay")
+//            println("Delay = $delayMillis")
             Thread.sleep(delay.toLong())
         }
     }

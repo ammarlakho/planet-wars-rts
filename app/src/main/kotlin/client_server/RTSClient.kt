@@ -32,7 +32,7 @@ fun main(args: Array<String>) {
                     // Decode incoming message
                     val gameState = Json.decodeFromString<GameState>(frame.readText())
                     println("Received GameState: $gameState")
-                    // calculate the delay from the timestamp until now
+                    // calculate the delayMillis from the timestamp until now
                     // wait for clientDelay before sending the response
                     delay(clientDelay)
                     val delay = Instant.now().toEpochMilli() - gameState.timestamp
