@@ -26,8 +26,8 @@ data class GameRunnerCoRoutines(
         if (gameParams.newMapEachRun) {
             gameState = GameStateFactory(gameParams).createGame()
         }
-        agent1.prepareToPlayAs(Player.Player1)
-        agent2.prepareToPlayAs(Player.Player2)
+        agent1.prepareToPlayAs(Player.Player1, gameParams)
+        agent2.prepareToPlayAs(Player.Player2, gameParams)
         forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
         runBlocking {
             while (!forwardModel.isTerminal()) {
@@ -108,8 +108,8 @@ fun main() {
     val gameState = GameStateFactory(gameParams).createGame()
     val agent1 = PureRandomAgent()
 //    val agent2 = games.planetwars.agents.BetterRandomAgent()
-    val agent2 = SlowRandomAgent(delayMillis = 1000)
-//    val agent2 = games.planetwars.agents.random.HeavyRandomAgent(delayMillis = 1000)
+//    val agent2 = SlowRandomAgent(delayMillis = 1000)
+    val agent2 = games.planetwars.agents.random.HeavyRandomAgent(delayMillis = 1000)
     val gameRunner = GameRunnerCoRoutines(agent1, agent2, gameParams, timeoutMillis = 1)
     val finalModel = gameRunner.runGame()
     println("Game over!")

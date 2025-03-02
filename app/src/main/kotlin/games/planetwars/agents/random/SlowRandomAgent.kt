@@ -43,7 +43,7 @@ class SlowRandomAgent(val delayMillis: Long = 1000) : PlanetWarsPlayer() {
 
 fun main() {
     val gameState = GameStateFactory(GameParams()).createGame()
-    val agent = SlowRandomAgent().prepareToPlayAs(Player.Player1)
+    val agent = SlowRandomAgent().prepareToPlayAs(Player.Player1, GameParams())
     val action = agent.getAction(gameState)
     println(action)
 }

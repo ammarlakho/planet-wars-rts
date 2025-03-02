@@ -1,5 +1,6 @@
 package games.planetwars.agents
 
+import games.planetwars.core.GameParams
 import games.planetwars.core.GameState
 import games.planetwars.core.Player
 
@@ -12,7 +13,7 @@ class AgentInterfaces {
 interface PlanetWarsAgent {
     fun getAction(gameState: GameState): Action
     fun getAgentType(): String
-    fun prepareToPlayAs(player: Player): PlanetWarsAgent
+    fun prepareToPlayAs(player: Player, params: GameParams): PlanetWarsAgent
 
     // this is provided as a default implementation, but can be overridden if needed
     fun processGameOver(finalState: GameState) {}
@@ -25,16 +26,11 @@ interface PlanetWarsAgent {
  */
 abstract class PlanetWarsPlayer : PlanetWarsAgent {
     protected var player: Player = Player.Neutral
+    protected var params: GameParams = GameParams()
 
-    override fun prepareToPlayAs(player: Player): PlanetWarsAgent {
+    override fun prepareToPlayAs(player: Player, params: GameParams): PlanetWarsAgent {
         this.player = player
+        this.params = params
         return this
     }
 }
-
-//
-//interface SimplePlayerInterface {
-//    fun getAction(gameState: AbstractGameState) : Int
-//    fun reset() : SimplePlayerInterface
-//    fun getAgentType(): String
-//}

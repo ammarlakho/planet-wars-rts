@@ -37,8 +37,8 @@ data class GameRunner(
             gameState = GameStateFactory(gameParams).createGame()
         }
         forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
-        agent1.prepareToPlayAs(Player.Player1)
-        agent2.prepareToPlayAs(Player.Player2)
+        agent1.prepareToPlayAs(Player.Player1, gameParams)
+        agent2.prepareToPlayAs(Player.Player2, gameParams)
     }
 
     fun stepGame() : ForwardModel {

@@ -33,7 +33,7 @@ class BetterRandomAgent() : PlanetWarsPlayer() {
 }
 
 fun main() {
-    val agent = BetterRandomAgent().prepareToPlayAs(Player.Player1)
+    val agent = BetterRandomAgent().prepareToPlayAs(Player.Player1, GameParams())
     val gameState = GameStateFactory(GameParams()).createGame()
     val action = agent.getAction(gameState)
     println(action)
