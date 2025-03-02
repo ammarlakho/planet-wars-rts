@@ -21,6 +21,6 @@ fun main() {
         preferredHeight = gameParams.height,
         app = GameView(params = gameParams, gameState = gameState, gameRunner = gameRunner),
         title = title,
-        frameRate = 1.0,
+        frameRate = 50.0,
     ).launch()
 }
