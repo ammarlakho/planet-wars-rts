@@ -1,6 +1,7 @@
 package games.planetwars.runners
 
 import games.planetwars.agents.PlanetWarsAgent
+import games.planetwars.agents.evo.SimpleEvoAgent
 import games.planetwars.agents.random.BetterRandomAgent
 import games.planetwars.agents.random.CarefulRandomAgent
 import games.planetwars.agents.random.PureRandomAgent
@@ -8,10 +9,8 @@ import games.planetwars.core.GameParams
 import games.planetwars.core.Player
 
 fun main() {
-    // TODO: Implement this using a factory pattern to specify agent constructors
-    // need this to run agents with different parameters
-    // or else could just make the agents with different params and add a reset method to prepare them for each new game
-    val agents = SamplePlayerLists().getRandomTrio()
+//    val agents = SamplePlayerLists().getRandomTrio()
+    val agents = SamplePlayerLists().getFullList()
     val league = RoundRobinLeague(agents)
     val results = league.runRoundRobin()
     // use the League utils to print the results
@@ -30,15 +29,22 @@ class SamplePlayerLists {
             CarefulRandomAgent(),
         )
     }
+    fun getFullList(): List<PlanetWarsAgent> {
+        return listOf(
+            PureRandomAgent(),
+            BetterRandomAgent(),
+            CarefulRandomAgent(),
+            SimpleEvoAgent(),
+        )
+    }
 }
 
 data class RoundRobinLeague(
     val agents: List<PlanetWarsAgent>,
-    val gamesPerPair: Int = 10,
+    val gamesPerPair: Int = 15,
     val gameParams: GameParams = GameParams(numPlanets = 20),
 ) {
     fun runPair(agent1: PlanetWarsAgent, agent2: PlanetWarsAgent): Map<Player, Int> {
-        val gameParams = GameParams(numPlanets = 20)
         val gameRunner = GameRunner(agent1, agent2, gameParams)
         return gameRunner.runGames(gamesPerPair)
     }
