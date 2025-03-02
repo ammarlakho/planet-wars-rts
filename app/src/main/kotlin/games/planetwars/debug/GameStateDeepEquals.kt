@@ -15,8 +15,8 @@ fun main() {
     // now run some game steps
     val gameRunner = GameRunner(
         initialGameState,
-        CarefulRandomAgent(Player.Player1),
-        BetterRandomAgent(Player.Player2),
+        CarefulRandomAgent(),
+        BetterRandomAgent(),
         GameParams(numPlanets = 20),
     )
 

@@ -21,6 +21,8 @@ data class GameRunnerCoRoutines(
     private var latestAction2: Action = Action.doNothing()
 
     fun runGame(): ForwardModel {
+        agent1.prepareToPlayAs(Player.Player1)
+        agent2.prepareToPlayAs(Player.Player2)
         forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
         runBlocking {
             while (!forwardModel.isTerminal()) {
@@ -46,38 +48,6 @@ data class GameRunnerCoRoutines(
 
             val action2 = scope.async(Dispatchers.Default) {
                 latestAction2 = agent2.getAction(state.deepCopy()) // Runs in a background thread
-                latestAction2
-            }
-
-            // Only wait for timeoutMillis for the agent actions, but do not cancel if they take longer
-            val action1Result = withTimeoutOrNull(timeoutMillis) { action1.await() } ?: doNothingAction
-            val action2Result = withTimeoutOrNull(timeoutMillis) { action2.await() } ?: doNothingAction
-
-            mapOf(
-                Player.Player1 to action1Result,
-                Player.Player2 to action2Result
-            )
-        } finally {
-            // Ensure any remaining jobs are cancelled when the game terminates
-            job.cancelChildren()
-        }
-    }
-
-    suspend fun getTimedActionsOld(state: GameState): Map<Player, Action> = coroutineScope {
-        val doNothingAction = Action.doNothing()
-
-        // Create a supervisor scope to manage child jobs independently
-        val job = SupervisorJob()
-        val scope = CoroutineScope(coroutineContext + job)
-
-        try {
-            val action1 = scope.async {
-                latestAction1 = agent1.getAction(state.deepCopy())
-                latestAction1
-            }
-
-            val action2 = scope.async {
-                latestAction2 = agent2.getAction(state.deepCopy())
                 latestAction2
             }
 
@@ -131,10 +101,10 @@ data class GameRunnerCoRoutines(
 fun main() {
     val gameParams = GameParams(numPlanets = 20)
     val gameState = GameStateFactory(gameParams).createGame()
-    val agent1 = games.planetwars.agents.PureRandomAgent(Player.Player1)
-//    val agent2 = games.planetwars.agents.BetterRandomAgent(Player.Player2)
-    val agent2 = games.planetwars.agents.SlowRandomAgent(Player.Player2, delayMillis = 1000)
-//    val agent2 = games.planetwars.agents.HeavyRandomAgent(Player.Player2, delayMillis = 1000)
+    val agent1 = games.planetwars.agents.PureRandomAgent()
+//    val agent2 = games.planetwars.agents.BetterRandomAgent()
+    val agent2 = games.planetwars.agents.SlowRandomAgent(delayMillis = 1000)
+//    val agent2 = games.planetwars.agents.HeavyRandomAgent(delayMillis = 1000)
     val gameRunner = GameRunnerCoRoutines(gameState, agent1, agent2, gameParams, timeoutMillis = 1)
     val finalModel = gameRunner.runGame()
     println("Game over!")

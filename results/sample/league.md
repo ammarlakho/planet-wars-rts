@@ -1,6 +1,5 @@
-| Rank | Agent Name | Wins | Losses | Draws |
-|------|------------|------|--------|-------|
-| 1 | AlphaBot | 10 | 2 | 1 |
-| 2 | GammaSolver | 8 | 3 | 3 |
-| 3 | BetaAI | 8 | 4 | 2 |
-| 4 | DeltaAgent | 6 | 5 | 3 |
+| Rank | Agent Name | Played | Win Rate |
+|------|------------|------|-------|
+| 1 | Better Random Agent | 92.5 | 40 |
+| 2 | Pure Random Agent | 55.0 | 40 |
+| 3 | Careful Random Agent | 2.5 | 40 |

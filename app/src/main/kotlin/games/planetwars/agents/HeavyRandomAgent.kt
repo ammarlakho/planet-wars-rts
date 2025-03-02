@@ -2,7 +2,7 @@ package games.planetwars.agents
 
 import games.planetwars.core.*
 
-class HeavyRandomAgent(val player: Player, val delayMillis: Int) : PlanetWarsAgent {
+class HeavyRandomAgent(val delayMillis: Int) : PlanetWarsPlayer() {
     override fun getAction(gameState: GameState): Action {
         // Simulate intensive computation with a busy loop (e.g., MCTS-like behavior)
         val endTime = System.currentTimeMillis() + delayMillis // Pretend to compute for 500ms

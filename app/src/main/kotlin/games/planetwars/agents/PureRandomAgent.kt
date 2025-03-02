@@ -5,7 +5,7 @@ import games.planetwars.core.GameState
 import games.planetwars.core.GameStateFactory
 import games.planetwars.core.Player
 
-class PureRandomAgent(val player: Player) : PlanetWarsAgent {
+class PureRandomAgent() : PlanetWarsPlayer() {
     override fun getAction(gameState: GameState): Action {
         val source = gameState.planets.random()
         val target = gameState.planets.random()
@@ -18,7 +18,7 @@ class PureRandomAgent(val player: Player) : PlanetWarsAgent {
 }
 
 fun main() {
-    val agent = PureRandomAgent(Player.Player1)
+    val agent = PureRandomAgent()
     val gameState = GameStateFactory(GameParams()).createGame()
     val action = agent.getAction(gameState)
     println(action)

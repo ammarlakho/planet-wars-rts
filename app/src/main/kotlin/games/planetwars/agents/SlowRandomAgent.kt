@@ -6,7 +6,7 @@ import games.planetwars.core.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
-class SlowRandomAgent(val player: Player, val delayMillis: Long = 1000) : PlanetWarsAgent {
+class SlowRandomAgent(val delayMillis: Long = 1000) : PlanetWarsPlayer() {
 
     override fun getAction(gameState: GameState): Action {
         // Run delayMillis in a coroutine context to avoid blocking the main thread
@@ -37,7 +37,7 @@ class SlowRandomAgent(val player: Player, val delayMillis: Long = 1000) : Planet
 
 fun main() {
     val gameState = GameStateFactory(GameParams()).createGame()
-    val agent = SlowRandomAgent(Player.Player1)
+    val agent = SlowRandomAgent()
     val action = agent.getAction(gameState)
     println(action)
 }
