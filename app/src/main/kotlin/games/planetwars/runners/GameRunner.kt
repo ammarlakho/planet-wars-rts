@@ -4,11 +4,11 @@ import games.planetwars.agents.PlanetWarsAgent
 import games.planetwars.core.*
 
 data class GameRunner(
-    val gameState: GameState,
     val agent1: PlanetWarsAgent,
     val agent2: PlanetWarsAgent,
     val gameParams: GameParams,
 ) {
+    var gameState: GameState = GameStateFactory(gameParams).createGame()
     var forwardModel: ForwardModel = ForwardModel(gameState.deepCopy(), gameParams)
     // call newGame() to reset the game state and agents in the constructor
     init {
@@ -18,9 +18,8 @@ data class GameRunner(
     fun runGame() : ForwardModel {
         // runs with a fresh copy of the game state each time
 //        val forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
-        forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
-        agent1.prepareToPlayAs(Player.Player1)
-        agent2.prepareToPlayAs(Player.Player2)
+
+        newGame()
         while (!forwardModel.isTerminal()) {
             val actions = mapOf(
                 Player.Player1 to agent1.getAction(forwardModel.state.deepCopy()),
@@ -32,6 +31,9 @@ data class GameRunner(
     }
 
     fun newGame() {
+        if (gameParams.newMapEachRun) {
+            gameState = GameStateFactory(gameParams).createGame()
+        }
         forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
         agent1.prepareToPlayAs(Player.Player1)
         agent2.prepareToPlayAs(Player.Player2)
@@ -64,10 +66,10 @@ data class GameRunner(
 
 fun main() {
     val gameParams = GameParams(numPlanets = 20)
-    val gameState = GameStateFactory(gameParams).createGame()
+//    val gameState = GameStateFactory(gameParams).createGame()
     val agent1 = games.planetwars.agents.PureRandomAgent()
     val agent2 = games.planetwars.agents.BetterRandomAgent()
-    val gameRunner = GameRunner(gameState, agent1, agent2, gameParams)
+    val gameRunner = GameRunner(agent1, agent2, gameParams)
     val finalModel = gameRunner.runGame()
     println("Game over!")
     println(finalModel.statusString())

@@ -8,12 +8,12 @@ import kotlinx.coroutines.*
 import kotlin.system.measureTimeMillis
 
 data class GameRunnerCoRoutines(
-    val gameState: GameState,
     val agent1: PlanetWarsAgent,
     val agent2: PlanetWarsAgent,
     val gameParams: GameParams,
     val timeoutMillis: Long = 500, // Timeout for agent responses
 ) {
+    var gameState: GameState = GameStateFactory(gameParams).createGame()
     var forwardModel: ForwardModel = ForwardModel(gameState.deepCopy(), gameParams)
 
     // Stores the latest actions from agents, even if computed late
@@ -21,6 +21,9 @@ data class GameRunnerCoRoutines(
     private var latestAction2: Action = Action.doNothing()
 
     fun runGame(): ForwardModel {
+        if (gameParams.newMapEachRun) {
+            gameState = GameStateFactory(gameParams).createGame()
+        }
         agent1.prepareToPlayAs(Player.Player1)
         agent2.prepareToPlayAs(Player.Player2)
         forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
@@ -105,13 +108,13 @@ fun main() {
 //    val agent2 = games.planetwars.agents.BetterRandomAgent()
     val agent2 = games.planetwars.agents.SlowRandomAgent(delayMillis = 1000)
 //    val agent2 = games.planetwars.agents.HeavyRandomAgent(delayMillis = 1000)
-    val gameRunner = GameRunnerCoRoutines(gameState, agent1, agent2, gameParams, timeoutMillis = 1)
+    val gameRunner = GameRunnerCoRoutines(agent1, agent2, gameParams, timeoutMillis = 1)
     val finalModel = gameRunner.runGame()
     println("Game over!")
     println(finalModel.statusString())
 
     // time to run a bunch of games
-    val nGames = 10
+    val nGames = 5
     val results = gameRunner.runGames(nGames)
     println(results)
 }

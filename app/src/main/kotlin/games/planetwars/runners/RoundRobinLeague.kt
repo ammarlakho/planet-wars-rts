@@ -37,8 +37,7 @@ data class RoundRobinLeague(
 ) {
     fun runPair(agent1: PlanetWarsAgent, agent2: PlanetWarsAgent): Map<Player, Int> {
         val gameParams = GameParams(numPlanets = 20)
-        val gameState = GameStateFactory(gameParams).createGame()
-        val gameRunner = GameRunner(gameState, agent1, agent2, gameParams)
+        val gameRunner = GameRunner(agent1, agent2, gameParams)
         return gameRunner.runGames(gamesPerPair)
     }
 

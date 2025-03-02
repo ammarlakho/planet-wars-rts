@@ -16,7 +16,10 @@ data class GameParams (
     val maxInitialShipsPerPlanet: Int = 20,
     val minGrowthRate: Double = 0.02,
     val maxGrowthRate: Double = 0.1,
-    val transporterSpeed: Double = 3.0
+    val transporterSpeed: Double = 3.0,
+
+    // meta game parameters
+    val newMapEachRun: Boolean = true,
 ){
 
 }
