@@ -1,5 +1,7 @@
-package games.planetwars.agents
+package games.planetwars.agents.random
 
+import games.planetwars.agents.Action
+import games.planetwars.agents.PlanetWarsPlayer
 import games.planetwars.core.GameParams
 import games.planetwars.core.GameState
 import games.planetwars.core.GameStateFactory
@@ -31,7 +33,7 @@ class BetterRandomAgent() : PlanetWarsPlayer() {
 }
 
 fun main() {
-    val agent = BetterRandomAgent()
+    val agent = BetterRandomAgent().prepareToPlayAs(Player.Player1)
     val gameState = GameStateFactory(GameParams()).createGame()
     val action = agent.getAction(gameState)
     println(action)

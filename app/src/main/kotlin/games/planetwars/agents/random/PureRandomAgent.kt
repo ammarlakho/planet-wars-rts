@@ -1,9 +1,10 @@
-package games.planetwars.agents
+package games.planetwars.agents.random
 
+import games.planetwars.agents.Action
+import games.planetwars.agents.PlanetWarsPlayer
 import games.planetwars.core.GameParams
 import games.planetwars.core.GameState
 import games.planetwars.core.GameStateFactory
-import games.planetwars.core.Player
 
 class PureRandomAgent() : PlanetWarsPlayer() {
     override fun getAction(gameState: GameState): Action {

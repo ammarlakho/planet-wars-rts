@@ -3,6 +3,8 @@ package games.planetwars.runners
 
 import games.planetwars.agents.Action
 import games.planetwars.agents.PlanetWarsAgent
+import games.planetwars.agents.random.PureRandomAgent
+import games.planetwars.agents.random.SlowRandomAgent
 import games.planetwars.core.*
 import kotlinx.coroutines.*
 import kotlin.system.measureTimeMillis
@@ -104,10 +106,10 @@ data class GameRunnerCoRoutines(
 fun main() {
     val gameParams = GameParams(numPlanets = 20)
     val gameState = GameStateFactory(gameParams).createGame()
-    val agent1 = games.planetwars.agents.PureRandomAgent()
+    val agent1 = PureRandomAgent()
 //    val agent2 = games.planetwars.agents.BetterRandomAgent()
-    val agent2 = games.planetwars.agents.SlowRandomAgent(delayMillis = 1000)
-//    val agent2 = games.planetwars.agents.HeavyRandomAgent(delayMillis = 1000)
+    val agent2 = SlowRandomAgent(delayMillis = 1000)
+//    val agent2 = games.planetwars.agents.random.HeavyRandomAgent(delayMillis = 1000)
     val gameRunner = GameRunnerCoRoutines(agent1, agent2, gameParams, timeoutMillis = 1)
     val finalModel = gameRunner.runGame()
     println("Game over!")

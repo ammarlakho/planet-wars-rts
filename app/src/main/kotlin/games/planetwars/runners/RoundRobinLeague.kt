@@ -1,8 +1,10 @@
 package games.planetwars.runners
 
 import games.planetwars.agents.PlanetWarsAgent
+import games.planetwars.agents.random.BetterRandomAgent
+import games.planetwars.agents.random.CarefulRandomAgent
+import games.planetwars.agents.random.PureRandomAgent
 import games.planetwars.core.GameParams
-import games.planetwars.core.GameStateFactory
 import games.planetwars.core.Player
 
 fun main() {
@@ -23,9 +25,9 @@ fun main() {
 class SamplePlayerLists {
     fun getRandomTrio(): List<PlanetWarsAgent> {
         return listOf(
-            games.planetwars.agents.PureRandomAgent(),
-            games.planetwars.agents.BetterRandomAgent(),
-            games.planetwars.agents.CarefulRandomAgent(),
+            PureRandomAgent(),
+            BetterRandomAgent(),
+            CarefulRandomAgent(),
         )
     }
 }
@@ -44,8 +46,11 @@ data class RoundRobinLeague(
     fun runRoundRobin(): Map<String, LeagueEntry> {
         val scores = mutableMapOf<String, LeagueEntry>()
         for (agent in agents) {
+            // make a new league entry for each agent in a map indexed by agent type
             scores[agent.getAgentType()] = LeagueEntry(agent.getAgentType())
         }
+        // play each agent against every other agent as Player1 and Player2
+        // but not against themselves
         for (i in 0 until agents.size) {
             for (j in 0 until agents.size) {
                 if (i == j) {

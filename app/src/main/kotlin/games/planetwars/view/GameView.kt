@@ -6,29 +6,35 @@ import util.Vec2d
 import xkg.gui.*
 import xkg.jvm.AppLauncher
 
-class GameView (
+class GameView(
     var gameState: GameState,
     val params: GameParams = GameParams(),
     val colors: ColorScheme = ColorScheme(),
     var gameRunner: GameRunner? = null,
-    ): XApp {
+    var paused: Boolean = false,
+) : XApp {
 
 
 //    val gameRunner = GameRunner(gameState, params)
 
     override fun paint(xg: XGraphics) {
+        if (!paused) {
+            gameStep()
+        }
+        drawBackground(xg)
+        drawPlanets(xg)
+        drawTransporters(xg)
+        drawStatus(xg)
+    }
+
+    private fun gameStep() {
         val runner = gameRunner
         if (runner != null) {
             if (runner.forwardModel.isTerminal()) {
                 runner.newGame()
             }
             gameState = runner.stepGame().state
-//            println(runner.forwardModel.statusString())
         }
-        drawBackground(xg)
-        drawPlanets(xg)
-        drawTransporters(xg)
-        drawStatus(xg)
     }
 
     private fun drawPlanets(xg: XGraphics) {
@@ -38,7 +44,8 @@ class GameView (
             val circle = XEllipse(
                 planet.position,
                 size, size,
-                XStyle(fg = color, fill = true))
+                XStyle(fg = color, fill = true, stroke = false)
+            )
             xg.draw(circle)
             // draw the number of ships
             val tStyle = TStyle(fg = colors.text, size = 14.0)
@@ -51,7 +58,7 @@ class GameView (
         // define the shape of the ship
 //         static int[] xp = {-2, 0, 2, 0};
 //        static int[] yp = {2, -2, 2, 0};
-        val scale = 5.0
+        val scale = 8.0
         val points = arrayListOf(
             Vec2d(-2.0, 2.0) * scale,
             Vec2d(0.0, 0.0) * scale,
@@ -61,7 +68,7 @@ class GameView (
 
         val color = colors.getColor(transporter.owner)
 
-        val xPoly = XPoly(transporter.s, points, XStyle(fg = color, fill = true))
+        val xPoly = XPoly(transporter.s, points, XStyle(fg = color, fill = true, stroke = false))
         xPoly.rotation = transporter.v.angle()
         xg.draw(xPoly)
 
@@ -93,9 +100,30 @@ class GameView (
         if (runner != null) {
             val status = runner.forwardModel.statusString()
             val tStyle = TStyle(fg = colors.text, size = 14.0)
-            val text = XText("Game status: $status", Vec2d(xg.width()/2, 20.0), tStyle)
+            val text = XText("Game status: $status", Vec2d(xg.width() / 2, 20.0), tStyle)
             xg.draw(text)
         }
+    }
+
+
+    override fun handleKeyEvent(e: XKeyEvent) {
+        if (e.t != XKeyEventType.Pressed) return
+        println("Key event: $e")
+        if (e.keyCode == ' '.code) {
+            paused = !paused
+        }
+        // if keycode is 's' then slow down the frame rate
+        // not we use the capitals to avoid the shift key
+        if (e.keyCode == 'S'.code) {
+            AppLauncher.globFrameRate /= 2.0
+        }
+        if (e.keyCode == 'F'.code) {
+            AppLauncher.globFrameRate *= 2.0
+            // limit the frame rate to 32fps
+            AppLauncher.globFrameRate = minOf(AppLauncher.globFrameRate, 100.0)
+        }
+        println("Frame rate: ${AppLauncher.globFrameRate}")
+        println('s'.code)
     }
 }
 
@@ -114,5 +142,6 @@ fun main() {
         preferredWidth = params.width,
         preferredHeight = params.height,
         app = GameView(params = params, gameState = gameState),
-        title = title).launch()
+        title = title
+    ).launch()
 }

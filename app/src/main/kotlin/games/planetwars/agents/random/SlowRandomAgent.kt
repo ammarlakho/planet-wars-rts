@@ -1,10 +1,16 @@
-package games.planetwars.agents
+package games.planetwars.agents.random
 
+import games.planetwars.agents.Action
+import games.planetwars.agents.PlanetWarsPlayer
 import games.planetwars.core.*
 
-import games.planetwars.core.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+
+/*
+* This agent simulates a slow player by adding a delay of delayMillis milliseconds before returning an action.
+* Only use this agent for testing the coroutines and the timeout mechanism.
+ */
 
 class SlowRandomAgent(val delayMillis: Long = 1000) : PlanetWarsPlayer() {
 
@@ -37,7 +43,7 @@ class SlowRandomAgent(val delayMillis: Long = 1000) : PlanetWarsPlayer() {
 
 fun main() {
     val gameState = GameStateFactory(GameParams()).createGame()
-    val agent = SlowRandomAgent()
+    val agent = SlowRandomAgent().prepareToPlayAs(Player.Player1)
     val action = agent.getAction(gameState)
     println(action)
 }

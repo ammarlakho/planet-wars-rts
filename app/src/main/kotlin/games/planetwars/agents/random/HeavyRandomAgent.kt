@@ -1,6 +1,13 @@
-package games.planetwars.agents
+package games.planetwars.agents.random
 
+import games.planetwars.agents.Action
+import games.planetwars.agents.PlanetWarsPlayer
 import games.planetwars.core.*
+
+/*
+    * This agent is a random agent that simulates heavy computation by performing a busy loop.
+    * Only use this agent for testing the coroutines and the timeout mechanism.
+ */
 
 class HeavyRandomAgent(val delayMillis: Int) : PlanetWarsPlayer() {
     override fun getAction(gameState: GameState): Action {

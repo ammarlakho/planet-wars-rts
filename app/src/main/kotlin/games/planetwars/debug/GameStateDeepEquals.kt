@@ -1,7 +1,7 @@
 package games.planetwars.debug
 
-import games.planetwars.agents.BetterRandomAgent
-import games.planetwars.agents.CarefulRandomAgent
+import games.planetwars.agents.random.BetterRandomAgent
+import games.planetwars.agents.random.CarefulRandomAgent
 import games.planetwars.core.*
 import games.planetwars.runners.GameRunner
 
