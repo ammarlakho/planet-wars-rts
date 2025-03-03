@@ -1,6 +1,4 @@
 | Rank | Agent Name | Win Rate | Played |
 |------|------------|------|-------|
-| 1 | Pure Random Agent | 66.66666666666667 | 120 |
-| 2 | Better Random Agent | 66.66666666666667 | 120 |
-| 3 | EvoAgent-200-20-0.2-true | 64.16666666666667 | 120 |
-| 4 | Careful Random Agent | 2.5 | 120 |
+| 1 | EvoAgent-100-50-0.2-true | 56.666666666666664 | 30 |
+| 2 | Better Random Agent | 43.333333333333336 | 30 |

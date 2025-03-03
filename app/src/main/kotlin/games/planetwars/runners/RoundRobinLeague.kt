@@ -31,10 +31,10 @@ class SamplePlayerLists {
     }
     fun getFullList(): List<PlanetWarsAgent> {
         return listOf(
-            PureRandomAgent(),
+//            PureRandomAgent(),
             BetterRandomAgent(),
-            CarefulRandomAgent(),
-            SimpleEvoAgent(),
+//            CarefulRandomAgent(),
+            SimpleEvoAgent(useShiftBuffer = true, nEvals = 50, sequenceLength = 100),
         )
     }
 }
