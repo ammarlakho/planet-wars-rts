@@ -14,7 +14,10 @@ data class GameStateWrapper(
     val opponentModel: PlanetWarsAgent = DoNothingAgent(),
 ) {
     var forwardModel = ForwardModel(gameState, params)
-    val shiftBy = 2
+
+    companion object {
+        val shiftBy = 2
+    }
 
     fun getAction(gameState: GameState, from: Float, to: Float): Action {
         // filter the planets that are owned by the player AND have a transporter available
@@ -56,12 +59,13 @@ data class GameStateWrapper(
 
 data class SimpleEvoAgent(
     var flipAtLeastOneValue: Boolean = true,
-    var probMutation: Double = 0.2,
+    var probMutation: Double = 0.3,
     var sequenceLength: Int = 200,
     var nEvals: Int = 20,
     var useShiftBuffer: Boolean = true,
     var epsilon: Double = 1e-6,
     var timeLimitMillis: Long = 10,
+    var opponentModel: PlanetWarsAgent = DoNothingAgent(),
 
     ) : PlanetWarsPlayer() {
     override fun getAgentType(): String {
@@ -81,27 +85,24 @@ data class SimpleEvoAgent(
     data class ScoredSolution(val score: Double, val solution: FloatArray)
 
     override fun getAction(gameState: GameState): Action {
-        val wrapper = GameStateWrapper(gameState.deepCopy(), params, player)
-        if (bestSolution == null) {
+
+        if (bestSolution == null || !useShiftBuffer) {
             val solution = randomPoint()
-            bestSolution = ScoredSolution(evalSeq(wrapper, solution), solution)
-        }
-        if (useShiftBuffer) {
-            val nextSeq = shiftLeftAndRandomAppend(bestSolution!!.solution, wrapper.shiftBy)
-            bestSolution = ScoredSolution(evalSeq(wrapper, nextSeq), nextSeq)
+            bestSolution = ScoredSolution(evalSeq(gameState, solution), solution)
         } else {
-            val nextSeq = randomPoint()
-            bestSolution = ScoredSolution(evalSeq(wrapper, nextSeq), nextSeq)
+            val nextSeq = shiftLeftAndRandomAppend(bestSolution!!.solution, GameStateWrapper.shiftBy)
+            bestSolution = ScoredSolution(evalSeq(gameState, nextSeq), nextSeq)
         }
         val best = bestSolution ?: return Action.doNothing()
 
         for (i in 0 until nEvals) {
             val mut = mutate(best.solution, probMutation)
-            val mutScore = evalSeq(wrapper, mut)
+            val mutScore = evalSeq(gameState, mut)
             if (mutScore >= best.score) {
                 bestSolution = ScoredSolution(mutScore, mut)
             }
         }
+        val wrapper = GameStateWrapper(gameState, params, player)
         val action = wrapper.getAction(gameState, best.solution[0], best.solution[1])
         return action
     }
@@ -151,7 +152,8 @@ data class SimpleEvoAgent(
         return p
     }
 
-    private fun evalSeq(wrapper: GameStateWrapper, seq: FloatArray): Double {
+    private fun evalSeq(state: GameState, seq: FloatArray): Double {
+        val wrapper = GameStateWrapper(state.deepCopy(), params, player, opponentModel)
         wrapper.runForwardModel(seq)
         return wrapper.scoreDifference()
     }

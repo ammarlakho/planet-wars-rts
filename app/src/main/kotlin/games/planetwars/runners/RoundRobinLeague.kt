@@ -33,15 +33,15 @@ class SamplePlayerLists {
         return listOf(
 //            PureRandomAgent(),
             BetterRandomAgent(),
-//            CarefulRandomAgent(),
-            SimpleEvoAgent(useShiftBuffer = true, nEvals = 50, sequenceLength = 100),
+            CarefulRandomAgent(),
+            SimpleEvoAgent(useShiftBuffer = true, nEvals = 50, sequenceLength = 200, opponentModel = PureRandomAgent()),
         )
     }
 }
 
 data class RoundRobinLeague(
     val agents: List<PlanetWarsAgent>,
-    val gamesPerPair: Int = 15,
+    val gamesPerPair: Int = 50,
     val gameParams: GameParams = GameParams(numPlanets = 20),
 ) {
     fun runPair(agent1: PlanetWarsAgent, agent2: PlanetWarsAgent): Map<Player, Int> {
@@ -50,6 +50,7 @@ data class RoundRobinLeague(
     }
 
     fun runRoundRobin(): Map<String, LeagueEntry> {
+        val t = System.currentTimeMillis()
         val scores = mutableMapOf<String, LeagueEntry>()
         for (agent in agents) {
             // make a new league entry for each agent in a map indexed by agent type
@@ -74,6 +75,7 @@ data class RoundRobinLeague(
                 leagueEntry2.nGames += gamesPerPair
             }
         }
+        println("Round Robin took ${(System.currentTimeMillis() - t)/1000} seconds")
         return scores
     }
 }
