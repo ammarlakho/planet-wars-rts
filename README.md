@@ -1,5 +1,14 @@
 # Planet Wars RTS
 
+## note: currently in early access: 
+the code works for a fully observable version: download and start developing your
+agents, but the following features are still under development:
+
+* agent interfaces (will undergo some minor changes)
+* partially observability
+* containerised version (PodMan or Docker)
+* some extra game features
+
 This repo contains the code and instructions for a series
 of Planet Wars Real-Time Strategy (RTS) games.
 
