@@ -99,6 +99,24 @@ a doNothing action, and proceeds to step the game forward.
 
 Hence this mode is truly real-time.
 
+
+## Agent Deployment
+
+For debugging and development run your code locally by
+extending the examples in the `games.planetwars.runners` package,
+if developing in Kotlin, Java or any JVM language.
+
+For other languages, follow the examples in the Python
+directory (**coming soon**).
+
+For competitions, you can deploy your agent to a PodMan
+container, and provide the link via the competition
+interface. (**coming soon**)
+
+### Loading a learned model
+
+(**coming soon**)
+
 ## The codebase and philosophy
 
 The code aims to be well-structured, easy to read and efficient.
