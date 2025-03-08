@@ -28,6 +28,29 @@ of the game.  This includes:
 
 ## Agent API
 
+To keep the interface consistent across different versions of the game, the agent API is as follows:
+
+```kotlin
+interface PlanetWarsAgent {
+    fun getAction(observation: GameStateObservation): Action
+    fun getAgentType(): String
+    fun prepareToPlayAs(player: Player, params: GameParams): PlanetWarsAgent
+
+    // this is provided as a default implementation, but can be overridden if needed
+    fun processGameOver(finalState: GameState) {}
+}
+
+```
+For fully observable games, the `observation` has all the details
+required to construct the game state.  For partially observable versions,
+the agent must either act directly in response to the observation,
+or construct a game state from the observation
+together with some assumptions or sampling of hidden variables.
+
+A `GameState` object is required for planning algorithms in order to use the forward model provided.
+
+
+
 
 
 ## Game Runners
@@ -70,8 +93,15 @@ game parameters, observation details and forward model.
 
 ## The evaluation
 
+For your own evaluations see the `games.planetwars.runners.RoundRobinLeague` example.
+Running this with the sample agents will produce a league table similar to the following one:
+
+| Rank | Agent Name | Win Rate | Played |
+|------|------------|------|-------|
+| 1 | EvoAgent-200-50-0.3-true | 79.5 | 200 |
+| 2 | Better Random Agent | 69.0 | 200 |
+| 3 | Careful Random Agent | 1.5 | 200 |
+
+For compeitions we aim to run sufficient games to arrive at a stable rank order of the agents.
 
 
-
-The games
-Planet wars RTS game for AI agent evaluation
