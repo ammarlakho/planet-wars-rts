@@ -16,6 +16,13 @@ Figures below show a fully observable and a partially observable game in play.
 Planet Wars is a simultaneuous move RTS game where players 
 aim to gain control of planets and destroy enemy units.
 
+We aim to provide a framework for developing and testing AI 
+agents in a fast and flexible way.  The challenge is open-ended
+as the game parameters can be varied to create a range of challenges.
+Even the simpler versions still have the difficulty of
+dealing with the simultaneous move nature of the game
+and unpredictable opponent actions.
+
 The software supports a family of games where key
 details can be varied to affect the difficulty
 of the game.  This includes:
