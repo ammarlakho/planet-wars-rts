@@ -13,7 +13,7 @@ Figures below show a fully observable and a partially observable game in play.
 
 ## The core idea
 
-Planet Wars is a simultaneuous move RTS game where players 
+Planet Wars is an RTS game where players 
 aim to gain control of planets and destroy enemy units.
 
 We aim to provide a framework for developing and testing AI 
