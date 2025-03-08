@@ -8,6 +8,7 @@ agents, but the following features are still under development:
 * partially observability
 * containerised version (PodMan or Docker)
 * some extra game features
+* Python sample
 
 This repo contains the code and instructions for a series
 of Planet Wars Real-Time Strategy (RTS) games.
