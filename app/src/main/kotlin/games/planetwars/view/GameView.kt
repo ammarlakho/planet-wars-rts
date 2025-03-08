@@ -12,6 +12,11 @@ class GameView(
     val colors: ColorScheme = ColorScheme(),
     var gameRunner: GameRunner? = null,
     var paused: Boolean = false,
+    var showInfoFor: Set<Player> = setOf(
+        Player.Player1,
+//        Player.Player2,
+//        Player.Neutral,
+    ),
 ) : XApp {
 
 
@@ -47,7 +52,8 @@ class GameView(
                 XStyle(fg = color, fill = true, stroke = false)
             )
             xg.draw(circle)
-            // draw the number of ships
+            // draw the number of ships only if we are observing for the owner
+            if (planet.owner !in showInfoFor) continue
             val tStyle = TStyle(fg = colors.text, size = 14.0)
             val text = XText("${planet.nShips.toInt()}", planet.position, tStyle)
             xg.draw(text)
@@ -71,6 +77,8 @@ class GameView(
         val xPoly = XPoly(transporter.s, points, XStyle(fg = color, fill = true, stroke = false))
         xPoly.rotation = transporter.v.angle()
         xg.draw(xPoly)
+
+        if (transporter.owner !in showInfoFor) return
 
         // draw the number of ships, but not rotated
         val tStyle = TStyle(fg = colors.text, size = 14.0)
