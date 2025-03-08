@@ -12,6 +12,9 @@ The software supports a family of games where key
 details can be varied to affect the difficulty
 of the game.  This includes:
 
+* Observability of the game state: 
+  - full
+  - partial: full observability of the player's own assets, only ownership of neutral and opponent planets
 * The number of planets
 * The battle rules
 * In-transit collisions
@@ -22,7 +25,6 @@ of the game.  This includes:
   - the difference in the number of units
   - whether units in transit count towards the total
 * The game duration
-
 
 ## Agent API
 
@@ -60,6 +62,11 @@ a doNothing action, and proceeds to step the game forward.
 Hence this mode is truly real-time.
 
 ## The codebase and philosophy
+
+The code aims to be well-structured, easy to read and efficient.
+The agent interface is designed to be the same for all versions of the game, as is the game state representation and game state observations.
+The key differences between versions of the game are captured in the
+game parameters, observation details and forward model.
 
 ## The evaluation
 
