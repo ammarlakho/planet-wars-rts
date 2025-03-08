@@ -3,6 +3,14 @@
 This repo contains the code and instructions for a series
 of Planet Wars Real-Time Strategy (RTS) games.
 
+Figures below show a fully observable and a partially observable game in play.
+
+<img width="638" alt="image" src="https://github.com/user-attachments/assets/dc702b7c-745d-44e9-a7b9-d172ecd65478" />
+
+<img width="640" alt="image" src="https://github.com/user-attachments/assets/e1de70d3-444d-49bf-b0ee-dc5982eebbfc" />
+
+
+
 ## The core idea
 
 Planet Wars is a simultaneuous move RTS game where players 
