@@ -82,4 +82,7 @@ fun main() {
     val dt = System.currentTimeMillis() - t
     println(results)
     println("Time per game: ${dt.toDouble() / nGames} ms")
+    // also print time per step
+    val nSteps = ForwardModel.nUpdates
+    println("Time per step: ${dt.toDouble() / nSteps} ms")
 }
