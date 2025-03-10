@@ -39,6 +39,9 @@ dependencies {
     // Additional Libraries
     implementation("com.google.guava:guava:32.1.2-jre")
 }
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+}
 
 java {
     toolchain {
