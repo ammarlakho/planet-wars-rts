@@ -36,7 +36,7 @@ class ForwardModel(val state: GameState, val params: GameParams) {
                 val s = source.position
                 val t = target.position
                 val v = (t - s).normalize() * params.transporterSpeed
-                val transporter = Transporter(s, v, player, action.destinationPlanetId, action.numShips)
+                val transporter = Transporter(s, v, player, action.sourcePlanetId, action.destinationPlanetId, action.numShips)
                 source.transporter = transporter
                 nActions += 1
             } else {

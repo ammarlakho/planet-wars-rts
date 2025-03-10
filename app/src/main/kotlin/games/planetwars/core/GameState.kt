@@ -1,6 +1,7 @@
 package games.planetwars.core
 
 import util.Vec2d
+import javax.xml.transform.Source
 
 // define an enum class for the owner of a planet which could be either player 1, player 2, or neutral
 enum class Player {
@@ -30,6 +31,7 @@ data class Transporter (
     var s: Vec2d,
     var v: Vec2d,
     val owner: Player,
+    val sourceIndex: Int,
     val destinationIndex: Int,
     val nShips: Double,
 ) {
@@ -53,8 +55,9 @@ data class GameState (
                         s = Vec2d(transporter.s.x, transporter.s.y),
                         v = Vec2d(transporter.v.x, transporter.v.y),
                         owner = transporter.owner,
+                        sourceIndex = transporter.sourceIndex,
                         destinationIndex = transporter.destinationIndex,
-                        nShips = transporter.nShips
+                        nShips = transporter.nShips,
                     )
                 },
                 pending = planet.pending.toMutableMap(),
@@ -78,6 +81,7 @@ fun main() {
             s = Vec2d(50.0, 50.0),
             v = Vec2d(1.0, 1.0),
             owner = Player.Player1,
+            sourceIndex = 0,
             destinationIndex = 0,
             nShips = 10.0
         ),

@@ -8,6 +8,9 @@ repositories {
     mavenCentral()
 }
 
+group = "sml"
+version = "1.0-SNAPSHOT"
+
 dependencies {
     // Kotlin Standard Library
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.10")

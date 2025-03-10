@@ -85,4 +85,8 @@ fun main() {
     // also print time per step
     val nSteps = ForwardModel.nUpdates
     println("Time per step: ${dt.toDouble() / nSteps} ms")
+
+    println("Successful actions: ${ForwardModel.nActions}")
+    println("Failed actions: ${ForwardModel.nFailedActions}")
+
 }
