@@ -1,14 +1,22 @@
 # Planet Wars RTS
 
 ## note: currently in early access: 
-the code works for a fully observable version: download and start developing your
-agents, but the following features are still under development:
 
-* agent interfaces (will undergo some minor changes)
-* partially observability
+The code is in early access, but the interfaces
+are intended to be stable both for the fully observable and partially
+observable versions of the game.
+
+To run headless games use the examples in the `games.planetwars.runners` package.
+
+To run games with a GUI, use the `games.planetwars.view.RunVisualGame` class.
+
+The following features are still under development:
+
 * containerised version (PodMan or Docker)
-* some extra game features
+* some extra game features (TBA)
 * Python sample
+
+## Introduction
 
 This repo contains the code and instructions for a series
 of Planet Wars Real-Time Strategy (RTS) games.
@@ -53,24 +61,70 @@ of the game.  This includes:
 
 ## Agent API
 
-To keep the interface consistent across different versions of the game, the agent API is as follows:
+There are two types depending on the observability.
+For the fully observable version, agents are given
+a copy of the complete game state at each time step,
+and follow this interface:
+
 
 ```kotlin
 interface PlanetWarsAgent {
-    fun getAction(observation: GameStateObservation): Action
-    fun getAgentType(): String
-    fun prepareToPlayAs(player: Player, params: GameParams): PlanetWarsAgent
+  fun getAction(gameState: GameState): Action
+  fun getAgentType(): String
+  fun prepareToPlayAs(player: Player, params: GameParams, opponent: Player? = null): PlanetWarsAgent
 
-    // this is provided as a default implementation, but can be overridden if needed
-    fun processGameOver(finalState: GameState) {}
+  // this is provided as a default implementation, but can be overridden if needed
+  fun processGameOver(finalState: GameState) {}
+}
+
+
+```
+
+For the partially observable game, agents use this interface:
+
+```kotlin
+interface PartialObservationAgent {
+  fun getAction(observation: Observation): Action
+  fun getAgentType(): String
+  fun prepareToPlayAs(player: Player, params: GameParams, opponent: Player? = null): PartialObservationAgent
+  // this is provided as a default implementation, but can be overridden if needed
+  // note that the final state is fully observable, so the agent can use this to learn from the final state
+  fun processGameOver(finalState: GameState) {}
 }
 
 ```
-For fully observable games, the `observation` has all the details
-required to construct the game state.  For partially observable versions,
-the agent must either act directly in response to the observation,
-or construct a game state from the observation
-together with some assumptions or sampling of hidden variables.
+
+There are simple helper classes provided to reconstruct a
+game state from an observation, and an example of using this 
+is given in this agent:
+
+```kotlin
+
+class PartialObservationPureRandomAgent() : PartialObservationPlayer() {
+
+  private val sampler = DefaultHiddenInfoSampler(params)
+  private val reconstructor = GameStateReconstructor(sampler)
+
+  override fun getAction(observation: Observation): Action {
+    // illustrate use of reconstructed game state from observation
+    val gameState = reconstructor.reconstruct(observation)
+    val source = gameState.planets.random()
+    val target = gameState.planets.random()
+    return Action(player, source.id, target.id, source.nShips / 2)
+  }
+
+  override fun getAgentType(): String {
+    return "Pure Random Agent"
+  }
+}
+
+```
+
+
+However, part of the skill of an agent is in the assumptions it
+makes about the hidden information, so we expect high performance
+agents to improve on the provided reconstruction example.
+
 
 A `GameState` object is required for planning algorithms in order to use the forward model provided.
 
