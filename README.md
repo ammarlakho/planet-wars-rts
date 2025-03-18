@@ -1,5 +1,8 @@
 # Planet Wars RTS
 
+<img width="406" alt="image" src="https://github.com/user-attachments/assets/d70c0d2a-bd57-4795-9ec4-fb35a401f8f3" alt="QR Code" width="150" align="right"/>
+
+
 ## note: currently in early access: 
 
 The code is in early access, but the interfaces
