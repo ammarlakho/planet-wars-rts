@@ -1,5 +1,8 @@
 # Planet Wars RTS
 
+<img width="406" alt="image" src="https://github.com/user-attachments/assets/d70c0d2a-bd57-4795-9ec4-fb35a401f8f3" alt="QR Code" width="150" align="right"/>
+
+
 ## note: currently in early access: 
 
 The code is in early access, but the interfaces
@@ -19,7 +22,14 @@ The following features are still under development:
 ## Introduction
 
 This repo contains the code and instructions for a series
-of Planet Wars Real-Time Strategy (RTS) games.
+of Planet Wars Real-Time Strategy (RTS) games.  So far it has been accepted to
+run in conjunction with the following conferences:
+
+- [GECCO 2025](https://gecco-2025.sigevo.org/Competition?itemId=5108)  
+- [IEEE Conference on Games 2025](https://cog2025.inesc-id.pt/competitions/)
+  
+
+More details on the variants used for each conference will be published later.
 
 Figures below show a fully observable and a partially observable game in play.
 
