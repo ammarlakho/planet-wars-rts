@@ -1,8 +1,16 @@
+//plugins {
+//    kotlin("jvm") version "1.9.10"
+//    kotlin("plugin.serialization") version "1.9.10"
+//    application
+//}
+
 plugins {
     kotlin("jvm") version "1.9.10"
     kotlin("plugin.serialization") version "1.9.10"
     application
+    id("com.github.johnrengelman.shadow") version "8.1.1" // Add shadow plugin
 }
+
 
 repositories {
     mavenCentral()
@@ -43,10 +51,33 @@ tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
 
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "client_server.MultiRTSServer"
+    }
+}
+
+tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+    archiveBaseName.set("client-server")
+    archiveClassifier.set("")
+    archiveVersion.set("")
+}
+
+//tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
+//    archiveBaseName.set("client-server")
+//    archiveClassifier.set("")
+//    archiveVersion.set("")
+//}
+
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(20) // Downgraded to Java 20 for compatibility
     }
+}
+
+application {
+    mainClass.set("client_server.MultiRTSServerKt") // Adjust this if your package structure is different
 }
 
 kotlin {
