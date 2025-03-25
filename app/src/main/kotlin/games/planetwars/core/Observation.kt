@@ -24,8 +24,8 @@ class ObservationFactory {
                             radius = planet.radius,
                             transporter = planet.transporter?.takeIf { it.owner in observers || includeTransporterLocations }
                                 ?.let { TransporterObservation(it.s, it.v, it.owner, it.sourceIndex, it.destinationIndex, if (it.owner in observers) it.nShips else null) },
-                            pending = planet.pending.toMutableMap(),
-                            id = planet.id
+                            // pending = planet.pending.toMutableMap(),
+                            id = planet.id,
                         )
                     }
                     else -> {
@@ -38,7 +38,7 @@ class ObservationFactory {
                             radius = planet.radius,
                             transporter = planet.transporter?.takeIf { includeTransporterLocations }
                                 ?.let { TransporterObservation(it.s, it.v, it.owner, it.sourceIndex, it.destinationIndex, null) },
-                            pending = mutableMapOf(), // Hide pending ships
+//                            pending = mutableMapOf(), // Hide pending ships
                             id = planet.id
                         )
                     }
@@ -56,7 +56,7 @@ data class PlanetObservation(
     val growthRate: Double,
     val radius: Double,
     val transporter: TransporterObservation?,
-    val pending: MutableMap<Player, Double>,
+//    val pending: MutableMap<Player, Double>,
     val id: Int
 )
 
@@ -84,7 +84,7 @@ fun main() {
             destinationIndex = 1,
             nShips = 10.0
         ),
-        pending = mutableMapOf(Player.Player1 to 5.0, Player.Player2 to 3.0),
+//        pending = mutableMapOf(Player.Player1 to 5.0, Player.Player2 to 3.0),
         id = 1
     )
 

@@ -22,7 +22,6 @@ class GameStateReconstructor(private val sampler: HiddenInfoSampler) {
                         nShips = observedTransporter.nShips ?: sampler.sampleTransporterShips()
                     )
                 },
-                pending = observedPlanet.pending.toMutableMap(),
                 id = observedPlanet.id
             )
         }
@@ -64,7 +63,7 @@ fun main() {
             destinationIndex = 1,
             nShips = null // Unknown transporter ship count
         ),
-        pending = mutableMapOf(),
+//        pending = mutableMapOf(),
         id = 1
     )
     val observation = Observation(listOf(observedPlanet), gameTick = 10)

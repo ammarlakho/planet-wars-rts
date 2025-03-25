@@ -21,7 +21,6 @@ class ObservationFactoryTest {
                 destinationIndex = 1,
                 nShips = 10.0
             ),
-            pending = mutableMapOf(Player.Player1 to 5.0, Player.Player2 to 3.0),
             id = 1
         )
         return GameState(planets = listOf(planet), gameTick = 0)

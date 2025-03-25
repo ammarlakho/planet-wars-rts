@@ -15,8 +15,12 @@ class ForwardModel(val state: GameState, val params: GameParams) {
     fun step(actions: Map<Player, Action>) {
         // increment the number of updates
         applyActions(actions)
-        updateTransporters()
-        updatePlanets()
+        // we use a pending map to track the incoming transporters to each planet at each step
+        // we then resolve the pending ships at each planet before updating the number of ships
+        // this makes a difference when two transporters arrive at the same time on a neutral planet
+        val pending = HashMap<Int, MutableMap<Player, Double>>() // pending ships for each planet
+        updateTransporters(pending)
+        updatePlanets(pending)
         nUpdates += 1
         state.gameTick++
     }
@@ -32,11 +36,12 @@ class ForwardModel(val state: GameState, val params: GameParams) {
             if (source.transporter == null && source.owner == player && source.nShips >= action.numShips) {
                 // launch a transporter
                 source.nShips -= action.numShips
-                source.pending[player] = source.pending[player]!! + action.numShips
+//                source.pending[player] = source.pending[player]!! + action.numShips
                 val s = source.position
                 val t = target.position
                 val v = (t - s).normalize() * params.transporterSpeed
-                val transporter = Transporter(s, v, player, action.sourcePlanetId, action.destinationPlanetId, action.numShips)
+                val transporter =
+                    Transporter(s, v, player, action.sourcePlanetId, action.destinationPlanetId, action.numShips)
                 source.transporter = transporter
                 nActions += 1
             } else {
@@ -71,13 +76,21 @@ class ForwardModel(val state: GameState, val params: GameParams) {
     }
 
 
-    fun transporterArrival(destination: Planet, transporter: Transporter) {
-        // process an arriving transporter
-        destination.pending[transporter.owner] = destination.pending[transporter.owner]!! + transporter.nShips
+    fun transporterArrival(
+        destination: Planet,
+        transporter: Transporter,
+        pending: MutableMap<Int, MutableMap<Player, Double>>
+    ) {
+        // if there is no pending map for the destination, create one, otherwise just update it
+        if (pending[destination.id] == null) {
+            pending[destination.id] = mutableMapOf(Player.Player1 to 0.0, Player.Player2 to 0.0)
+        }
+        // update the pending ships for the destination
+        pending[destination.id]!![transporter.owner] = pending[destination.id]!![transporter.owner]!! + transporter.nShips
     }
 
     // apply the actions to the game state
-    private fun updateTransporters() {
+    private fun updateTransporters(pending: MutableMap<Int, MutableMap<Player, Double>>) {
         // for each transit, update its progress and resolve if it has reached its destination
         // TODO: for each destination we should keep a list of incoming ships to resolve conflicts
         // we do this for fair resolution
@@ -87,7 +100,7 @@ class ForwardModel(val state: GameState, val params: GameParams) {
                 val destinationPlanet = state.planets[transporter.destinationIndex]
                 // check whether the transporter has arrived
                 if (transporter.s.distance(destinationPlanet.position) < destinationPlanet.radius) {
-                    transporterArrival(destinationPlanet, transporter)
+                    transporterArrival(destinationPlanet, transporter, pending)
                     planet.transporter = null
                 } else {
                     // update the position of the transporter
@@ -106,9 +119,13 @@ class ForwardModel(val state: GameState, val params: GameParams) {
 
      */
 
-    private fun updateNeutralPlanet(planet: Planet) {
-
-        val incoming = planet.pending[Player.Player1]!! - planet.pending[Player.Player2]!!
+    private fun updateNeutralPlanet(planet: Planet, pending: MutableMap<Player, Double>? = null) {
+        if (pending == null) {
+            return
+        }
+        val playerOneIncoming = pending[Player.Player1] ?: 0.0
+        val playerTwoIncoming = pending[Player.Player2] ?: 0.0
+        val incoming = playerOneIncoming - playerTwoIncoming
         // reduce neutral ships by absolute value of incoming
         planet.nShips -= Math.abs(incoming)
         // if the number is negative, we switch ownership to the player with the most incoming based on the sign
@@ -116,17 +133,18 @@ class ForwardModel(val state: GameState, val params: GameParams) {
             planet.owner = if (incoming > 0) Player.Player1 else Player.Player2
             planet.nShips = -planet.nShips
         }
-
     }
 
-    private fun updatePlayerPlanet(planet: Planet) {
+    private fun updatePlayerPlanet(planet: Planet, pending: MutableMap<Player, Double>? = null) {
         // this is simple:
         planet.nShips += planet.growthRate
         // resolve any pending ships on the planet
-        planet.nShips += planet.pending[planet.owner]!!
-        planet.pending[planet.owner] = 0.0
-        planet.nShips -= planet.pending[planet.owner.opponent()]!!
-        planet.pending[planet.owner.opponent()] = 0.0
+        if (pending == null) {
+            return
+        }
+        val ownIncoming = pending[planet.owner] ?: 0.0
+        val opponentIncoming = pending[planet.owner.opponent()] ?: 0.0
+        planet.nShips += ownIncoming - opponentIncoming
         // we check if it has switched ownership
         if (planet.nShips < 0) {
             planet.owner = planet.owner.opponent()
@@ -135,15 +153,15 @@ class ForwardModel(val state: GameState, val params: GameParams) {
     }
 
 
-    private fun updatePlanets() {
+    private fun updatePlanets(pending: MutableMap<Int, MutableMap<Player, Double>>) {
         // update the number of ships on each planet
         for (planet in state.planets) {
             // update the number of ships on the planet
             // we treat neutral planets differently
             if (planet.owner == Player.Neutral) {
-                updateNeutralPlanet(planet)
+                updateNeutralPlanet(planet, pending[planet.id])
             } else {
-                updatePlayerPlanet(planet)
+                updatePlayerPlanet(planet, pending[planet.id])
             }
         }
     }

@@ -80,10 +80,10 @@ fun Planet.deepEquals(other: Planet): Boolean {
         println("Mismatch in planet ID: ${this.id} vs ${other.id}")
         return false
     }
-    if (this.pending != other.pending) {
-        println("Mismatch in pending ships: ${this.pending} vs ${other.pending}")
-        return false
-    }
+//    if (this.pending != other.pending) {
+//        println("Mismatch in pending ships: ${this.pending} vs ${other.pending}")
+//        return false
+//    }
     if (!this.transporter.deepEquals(other.transporter)) {
         println("Mismatch in transporter: ${this.transporter} vs ${other.transporter}")
         return false

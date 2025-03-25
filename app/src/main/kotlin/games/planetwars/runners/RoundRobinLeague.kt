@@ -41,7 +41,7 @@ class SamplePlayerLists {
 
 data class RoundRobinLeague(
     val agents: List<PlanetWarsAgent>,
-    val gamesPerPair: Int = 50,
+    val gamesPerPair: Int = 10,
     val gameParams: GameParams = GameParams(numPlanets = 20),
 ) {
     fun runPair(agent1: PlanetWarsAgent, agent2: PlanetWarsAgent): Map<Player, Int> {

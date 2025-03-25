@@ -20,7 +20,6 @@ class GameStateReconstructorTest {
             growthRate = 1.5,
             radius = 20.0,
             transporter = null, // No transporter
-            pending = mutableMapOf(),
             id = 1
         )
         val observation = Observation(listOf(observedPlanet), gameTick = 10)
@@ -42,7 +41,6 @@ class GameStateReconstructorTest {
             growthRate = 1.2,
             radius = 18.0,
             transporter = null, // No transporter
-            pending = mutableMapOf(),
             id = 2
         )
         val observation = Observation(listOf(observedPlanet), gameTick = 15)
@@ -67,7 +65,6 @@ class GameStateReconstructorTest {
                 destinationIndex = 1,
                 nShips = null // Unknown transporter ship count
             ),
-            pending = mutableMapOf(),
             id = 3
         )
         val observation = Observation(listOf(observedPlanet), gameTick = 20)
