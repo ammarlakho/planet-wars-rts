@@ -12,7 +12,7 @@ data class GameParams (
     val numPlanets: Int = 10,
     val initialNeutralRatio: Double = 0.5,
     val maxTicks: Int = 2000,
-    val minInitialShipsPerPlanet: Int = 5,
+    val minInitialShipsPerPlanet: Int = 2,
     val maxInitialShipsPerPlanet: Int = 20,
     val minGrowthRate: Double = 0.02,
     val maxGrowthRate: Double = 0.1,

@@ -1,7 +1,6 @@
 package games.planetwars.core
 
 import util.Vec2d
-import javax.xml.transform.Source
 
 // define an enum class for the owner of a planet which could be either player 1, player 2, or neutral
 enum class Player {
