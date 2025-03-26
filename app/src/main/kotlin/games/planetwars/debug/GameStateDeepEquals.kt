@@ -5,8 +5,6 @@ import games.planetwars.agents.random.CarefulRandomAgent
 import games.planetwars.core.*
 import games.planetwars.runners.GameRunner
 
-class GameStateDeepEquals {
-}
 
 fun main() {
     val initialGameState = GameStateFactory(GameParams(numPlanets = 20)).createGame()
@@ -80,10 +78,6 @@ fun Planet.deepEquals(other: Planet): Boolean {
         println("Mismatch in planet ID: ${this.id} vs ${other.id}")
         return false
     }
-//    if (this.pending != other.pending) {
-//        println("Mismatch in pending ships: ${this.pending} vs ${other.pending}")
-//        return false
-//    }
     if (!this.transporter.deepEquals(other.transporter)) {
         println("Mismatch in transporter: ${this.transporter} vs ${other.transporter}")
         return false

@@ -20,8 +20,6 @@ class GameView(
 ) : XApp {
 
 
-//    val gameRunner = GameRunner(gameState, params)
-
     override fun paint(xg: XGraphics) {
         if (!paused) {
             gameStep()

@@ -19,7 +19,6 @@ data class PartialObservationGameRunner(
 
     fun runGame() : ForwardModel {
         // runs with a fresh copy of the game state each time
-//        val forwardModel = ForwardModel(gameState.deepCopy(), gameParams)
 
         newGame()
         while (!forwardModel.isTerminal()) {

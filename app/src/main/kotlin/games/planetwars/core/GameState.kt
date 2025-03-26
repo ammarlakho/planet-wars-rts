@@ -2,7 +2,8 @@ package games.planetwars.core
 
 import util.Vec2d
 
-// define an enum class for the owner of a planet which could be either player 1, player 2, or neutral
+// define an enum class for the owner of a planet which could be either
+// player 1, player 2, or neutral
 enum class Player {
     Player1, Player2, Neutral;
 
@@ -22,7 +23,6 @@ data class Planet (
     val growthRate: Double,
     val radius: Double,
     var transporter: Transporter? = null, // null means we're free to create one, otherwise it's in transit and not available
-//    val pending: MutableMap<Player, Double> = mutableMapOf(Player.Player1 to 0.0, Player.Player2 to 0.0),
     var id: Int = -1,  // will be more convenient to set id later
 )
 
@@ -59,7 +59,6 @@ data class GameState (
                         nShips = transporter.nShips,
                     )
                 },
-//                pending = planet.pending.toMutableMap(),
                 id = planet.id
             )
         }
@@ -84,7 +83,6 @@ fun main() {
             destinationIndex = 0,
             nShips = 10.0
         ),
-//        pending = mutableMapOf(Player.Player1 to 5.0, Player.Player2 to 3.0),
         id = 1
     )
 
