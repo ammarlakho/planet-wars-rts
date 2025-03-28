@@ -19,23 +19,37 @@ class GameView(
     ),
 ) : XApp {
 
-
+    private val width = params.width.toDouble()
+    private val height = params.height.toDouble()
 //    val gameRunner = GameRunner(gameState, params)
 
     override fun paint(xg: XGraphics) {
-        if (!paused) {
-            gameStep()
-        }
+        val scaleX = xg.width() / width
+        val scaleY = xg.height() / height
+        val scale = minOf(scaleX, scaleY)
+
+        val offsetX = (xg.width() / scale - width) / 2
+        val offsetY = (xg.height() / scale - height) / 2
+
+        xg.saveTransform()
+        xg.setScale(scale, scale)
+        xg.setTranslate(offsetX, offsetY)
+
+        if (!paused) gameStep()
+
         drawBackground(xg)
         drawPlanets(xg)
         drawTransporters(xg)
         drawStatus(xg)
+
+        xg.restoreTransform()
     }
 
     private fun gameStep() {
         val runner = gameRunner
         if (runner != null) {
             if (runner.forwardModel.isTerminal()) {
+                println(runner.forwardModel.statusString())
                 runner.newGame()
             }
             gameState = runner.stepGame().state
@@ -97,21 +111,20 @@ class GameView(
     }
 
     private fun drawBackground(xg: XGraphics) {
-        val centre = Vec2d(xg.width() / 2, xg.height() / 2)
-        val rect = XRect(centre, xg.width(), xg.height(), XStyle())
+        val centre = Vec2d(width / 2, height / 2)
+        val rect = XRect(centre, width, height)
         rect.dStyle = XStyle(fg = colors.background, lineWidth = 10.0)
         xg.draw(rect)
     }
 
     private fun drawStatus(xg: XGraphics) {
-        val runner = gameRunner
-        if (runner != null) {
-            val status = runner.forwardModel.statusString()
-            val tStyle = TStyle(fg = colors.text, size = 14.0)
-            val text = XText("Game status: $status", Vec2d(xg.width() / 2, 20.0), tStyle)
-            xg.draw(text)
-        }
+        val runner = gameRunner ?: return
+        val status = runner.forwardModel.statusString()
+        val tStyle = TStyle(fg = colors.text, size = 14.0)
+        val text = XText("Game status: $status", Vec2d(width / 2, 20.0), tStyle)
+        xg.draw(text)
     }
+
 
 
     override fun handleKeyEvent(e: XKeyEvent) {

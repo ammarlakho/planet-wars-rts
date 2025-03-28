@@ -15,7 +15,7 @@ import kotlin.math.min
 class XGraphicsJVM(val jc: JComponent) : XGraphics {
 
     val drawables = ArrayList<Drawable>()
-
+    private val transformStack = ArrayDeque<AffineTransform>()
     // var transform = Transform
 
     var rect: LRect? = null
@@ -34,6 +34,20 @@ class XGraphicsJVM(val jc: JComponent) : XGraphics {
 
     override fun setScale(x: Double, y: Double) {
         graphics2D?.let { it.scale(x, y) }
+    }
+
+    override fun saveTransform() {
+        graphics2D?.let { g ->
+            transformStack.addFirst(AffineTransform(g.transform))
+        }
+    }
+
+    override fun restoreTransform() {
+        graphics2D?.let { g ->
+            if (transformStack.isNotEmpty()) {
+                g.transform = transformStack.removeFirst()
+            }
+        }
     }
 
     override fun width(): Double {
