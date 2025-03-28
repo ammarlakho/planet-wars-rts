@@ -30,7 +30,8 @@ class CarefulRandomAgent() : PlanetWarsPlayer() {
 }
 
 fun main() {
-    val agent = CarefulRandomAgent().prepareToPlayAs(Player.Player1, GameParams())
+    val agent = CarefulRandomAgent()
+    agent.prepareToPlayAs(Player.Player1, GameParams())
     val gameState = GameStateFactory(GameParams()).createGame()
     val action = agent.getAction(gameState)
     println(action)

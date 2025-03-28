@@ -1,9 +1,13 @@
 package games.planetwars.core
 
+import json_rmi.RemoteConstructable
+import kotlinx.serialization.Serializable
 import util.Vec2d
 
 // define an enum class for the owner of a planet which could be either
 // player 1, player 2, or neutral
+
+@Serializable
 enum class Player {
     Player1, Player2, Neutral;
 
@@ -16,6 +20,7 @@ enum class Player {
     }
 }
 
+@Serializable
 data class Planet (
     var owner: Player,
     var nShips: Double, // need to support fractional ships for easy calculations
@@ -24,8 +29,9 @@ data class Planet (
     val radius: Double,
     var transporter: Transporter? = null, // null means we're free to create one, otherwise it's in transit and not available
     var id: Int = -1,  // will be more convenient to set id later
-)
+): RemoteConstructable
 
+@Serializable
 data class Transporter (
     var s: Vec2d,
     var v: Vec2d,
@@ -33,14 +39,15 @@ data class Transporter (
     val sourceIndex: Int,
     val destinationIndex: Int,
     val nShips: Double,
-) {
+) : RemoteConstructable{
 
 }
 
+@Serializable
 data class GameState (
     val planets: List<Planet>,  // list of planets does not change in a given game
     var gameTick: Int=0,
-){
+) : RemoteConstructable {
     fun deepCopy(): GameState {
         val copiedPlanets = planets.map { planet ->
             Planet(

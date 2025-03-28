@@ -1,9 +1,11 @@
 package util
 
+import kotlinx.serialization.Serializable
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
+@Serializable
 data class Vec2d(val x: Double=0.0, val y: Double=0.0) {
 
     operator fun plus(v: Vec2d) = Vec2d(x + v.x, y + v.y)

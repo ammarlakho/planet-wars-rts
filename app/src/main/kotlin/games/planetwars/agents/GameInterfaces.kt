@@ -1,6 +1,8 @@
 package games.planetwars.agents
 
 import games.planetwars.core.Player
+import json_rmi.RemoteConstructable
+import kotlinx.serialization.Serializable
 
 interface AbstractGameState {
     fun copy(): AbstractGameState
@@ -10,12 +12,13 @@ interface AbstractGameState {
     fun next(actions: Map<Player, Action>): AbstractGameState
 }
 
+@Serializable
 data class Action (
     val playerId: Player, // the player that is making the move, set to Neutral to do nothing
     val sourcePlanetId: Int,
     val destinationPlanetId: Int,
     val numShips: Double
-) {
+) : RemoteConstructable {
     companion object {
         val DO_NOTHING = Action(
             playerId = Player.Neutral,

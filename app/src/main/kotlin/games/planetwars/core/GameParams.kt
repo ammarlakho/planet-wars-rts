@@ -1,5 +1,9 @@
 package games.planetwars.core
 
+import json_rmi.RemoteConstructable
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class GameParams (
     // spatial parameters
     val width: Int = 640,
@@ -20,6 +24,6 @@ data class GameParams (
 
     // meta game parameters
     val newMapEachRun: Boolean = true,
-){
+) : RemoteConstructable {
 
 }
