@@ -1,5 +1,6 @@
 package json_rmi
 
+import games.planetwars.agents.Action
 import games.planetwars.core.GameParams
 import games.planetwars.core.GameState
 import games.planetwars.core.GameStateFactory
@@ -123,6 +124,14 @@ fun main() = runBlocking {
             gameState,
         )
         println("getAction Response: $actionResponse")
+
+        // also check what type the response is
+        val jsonResp = json.parseToJsonElement(actionResponse).jsonObject
+        val result = jsonResp["result"]
+        if (result != null && result is JsonObject) {
+            val action = json.decodeFromJsonElement(Action.serializer(), result)
+            println("Decoded Action: $action")
+        }
 
         endAgent(objectId)
     }

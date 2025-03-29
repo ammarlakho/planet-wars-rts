@@ -31,16 +31,22 @@ fun decodeArgument(p: KParameter, jsonArg: JsonElement): Any = when (p.type.clas
 }
 
 fun main() {
+    var frameCount = 0
+    val agentMap = mutableMapOf<String, PlanetWarsAgent>()
     embeddedServer(Netty, port = 8080) {
         install(WebSockets)
         routing {
             webSocket("/ws") {
-                val agentMap = mutableMapOf<String, PlanetWarsAgent>()
 
                 incoming.consumeEach { frame ->
+                    frameCount++
                     if (frame is Frame.Text) {
                         val request = json.decodeFromString<RemoteInvocationRequest>(frame.readText())
-                        println("Received: $request")
+                        println("Frame $frameCount; Received: $request")
+                        // print out the objectId and keys in the map
+//                        println("Agent map: $agentMap")
+                        println("Keys: ${agentMap.keys}")
+
 
                         val response = try {
                             when (request.requestType) {
@@ -54,7 +60,7 @@ fun main() {
                                     RemoteInvocationResponse("ok", json.encodeToJsonElement(mapOf("objectId" to id)))
                                 }
                                 RpcConstants.TYPE_INVOKE -> {
-                                    val agent = agentMap[request.objectId] ?: error("No such object")
+                                    val agent = agentMap[request.objectId] ?: error("No such object; frame $frameCount")
                                     val kFunction = agent::class.members.firstOrNull { it.name == request.method } ?: error("Unknown method: ${request.method}")
                                     val params = kFunction.parameters.drop(1).mapIndexed { i, p ->
                                         decodeArgument(p, request.args[i])
