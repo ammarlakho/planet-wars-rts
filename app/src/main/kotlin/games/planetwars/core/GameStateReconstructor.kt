@@ -63,7 +63,6 @@ fun main() {
             destinationIndex = 1,
             nShips = null // Unknown transporter ship count
         ),
-//        pending = mutableMapOf(),
         id = 1
     )
     val observation = Observation(listOf(observedPlanet), gameTick = 10)

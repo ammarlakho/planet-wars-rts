@@ -1,5 +1,6 @@
 package games.planetwars.runners
 
+import games.planetwars.agents.DoNothingAgent
 import games.planetwars.agents.PlanetWarsAgent
 import games.planetwars.agents.evo.SimpleEvoAgent
 import games.planetwars.agents.random.BetterRandomAgent
@@ -9,9 +10,10 @@ import games.planetwars.core.GameParams
 import games.planetwars.core.Player
 
 fun main() {
-//    val agents = SamplePlayerLists().getRandomTrio()
-    val agents = SamplePlayerLists().getFullList()
-    val league = RoundRobinLeague(agents)
+    val agents = SamplePlayerLists().getRandomTrio()
+//    val agents = SamplePlayerLists().getFullList()
+    agents.add(DoNothingAgent())
+    val league = RoundRobinLeague(agents, gamesPerPair = 100)
     val results = league.runRoundRobin()
     // use the League utils to print the results
     println(results)
@@ -22,15 +24,16 @@ fun main() {
 }
 
 class SamplePlayerLists {
-    fun getRandomTrio(): List<PlanetWarsAgent> {
-        return listOf(
+    fun getRandomTrio(): MutableList<PlanetWarsAgent> {
+        return mutableListOf(
             PureRandomAgent(),
             BetterRandomAgent(),
             CarefulRandomAgent(),
         )
     }
-    fun getFullList(): List<PlanetWarsAgent> {
-        return listOf(
+
+    fun getFullList(): MutableList<PlanetWarsAgent> {
+        return mutableListOf(
 //            PureRandomAgent(),
             BetterRandomAgent(),
             CarefulRandomAgent(),
@@ -75,7 +78,7 @@ data class RoundRobinLeague(
                 leagueEntry2.nGames += gamesPerPair
             }
         }
-        println("Round Robin took ${(System.currentTimeMillis() - t)/1000} seconds")
+        println("Round Robin took ${(System.currentTimeMillis() - t) / 1000} seconds")
         return scores
     }
 }

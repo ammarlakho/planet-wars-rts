@@ -11,7 +11,6 @@ class PartialObservationBetterRandomAgent() : PartialObservationPlayer() {
     override fun getAction(observation: Observation): Action {
         // filter the planets that are owned by the player AND have a transporter available
         val myPlanets = observation.observedPlanets.filter { it.owner == player && it.transporter == null }
-        // filter the planets that are owned by the player AND have a transporter available
         if (myPlanets.isEmpty()) {
             return Action.doNothing()
         }

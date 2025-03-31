@@ -26,11 +26,11 @@ data class LeagueWriter(
 ) {
 
     fun generateMarkdownTable(league: LeagueResult): String {
-        // Sort by wins (descending), then losses (ascending), then draws (descending)
         val sortedEntries = league.getSortedEntries()
-        val header = "| Rank | Agent Name | Win Rate | Played |\n|------|------------|------|-------|\n"
+        val header = "| Rank | Agent Name | Win Rate % | Played |\n|------|------------|----------|--------|\n"
         val rows = sortedEntries.mapIndexed { index, entry ->
-            "| ${index + 1} | ${entry.agentName} | ${entry.winRate()} | ${entry.nGames} |"
+            val formattedWinRate = "%.1f".format(entry.winRate())
+            "| ${index + 1} | ${entry.agentName} | $formattedWinRate | ${entry.nGames} |"
         }.joinToString("\n")
 
         return header + rows

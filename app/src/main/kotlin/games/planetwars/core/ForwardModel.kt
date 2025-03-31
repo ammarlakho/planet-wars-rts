@@ -36,7 +36,6 @@ class ForwardModel(val state: GameState, val params: GameParams) {
             if (source.transporter == null && source.owner == player && source.nShips >= action.numShips) {
                 // launch a transporter
                 source.nShips -= action.numShips
-//                source.pending[player] = source.pending[player]!! + action.numShips
                 val s = source.position
                 val t = target.position
                 val v = (t - s).normalize() * params.transporterSpeed
@@ -51,7 +50,7 @@ class ForwardModel(val state: GameState, val params: GameParams) {
     }
 
     fun isTerminal(): Boolean {
-        // the game is terminal if one of the players has no planets
+        // the game is terminal we're out of time or one of the players has no planets
         if (state.gameTick > params.maxTicks) {
             return true
         }

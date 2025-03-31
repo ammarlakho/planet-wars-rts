@@ -1,11 +1,9 @@
 package games.planetwars.core
 
 import games.planetwars.agents.Action
-import games.planetwars.agents.random.BetterRandomAgent
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 
 class ForwardModelTest {
 

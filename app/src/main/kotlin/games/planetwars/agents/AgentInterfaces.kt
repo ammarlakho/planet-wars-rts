@@ -12,10 +12,16 @@ import games.planetwars.core.Player
 interface PlanetWarsAgent {
     fun getAction(gameState: GameState): Action
     fun getAgentType(): String
-    fun prepareToPlayAs(player: Player, params: GameParams, opponent: Player? = null): PlanetWarsAgent
+    // player can return its description string
+    fun prepareToPlayAs(player: Player, params: GameParams, opponent: String? = DEFAULT_OPPONENT): String
 
     // this is provided as a default implementation, but can be overridden if needed
     fun processGameOver(finalState: GameState) {}
+
+    companion object {
+        const val DEFAULT_OPPONENT = "Anon"
+    }
+
 }
 
 /*
@@ -27,10 +33,10 @@ abstract class PlanetWarsPlayer : PlanetWarsAgent {
     protected var player: Player = Player.Neutral
     protected var params: GameParams = GameParams()
 
-    override fun prepareToPlayAs(player: Player, params: GameParams, opponent: Player?): PlanetWarsAgent {
+    override fun prepareToPlayAs(player: Player, params: GameParams, opponent: String?): String {
         this.player = player
         this.params = params
-        return this
+        return getAgentType()
     }
 }
 
