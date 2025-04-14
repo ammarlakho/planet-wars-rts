@@ -59,12 +59,12 @@ data class GameStateWrapper(
 
 data class SimpleEvoAgent(
     var flipAtLeastOneValue: Boolean = true,
-    var probMutation: Double = 0.3,
+    var probMutation: Double = 0.5,
     var sequenceLength: Int = 200,
     var nEvals: Int = 20,
     var useShiftBuffer: Boolean = true,
     var epsilon: Double = 1e-6,
-    var timeLimitMillis: Long = 10,
+    var timeLimitMillis: Long = 20,
     var opponentModel: PlanetWarsAgent = DoNothingAgent(),
 
     ) : PlanetWarsPlayer() {
@@ -80,8 +80,6 @@ data class SimpleEvoAgent(
 
     var bestSolution: ScoredSolution? = null
 
-    var x: Int? = 1
-
     data class ScoredSolution(val score: Double, val solution: FloatArray)
 
     override fun getAction(gameState: GameState): Action {
@@ -93,17 +91,16 @@ data class SimpleEvoAgent(
             val nextSeq = shiftLeftAndRandomAppend(bestSolution!!.solution, GameStateWrapper.shiftBy)
             bestSolution = ScoredSolution(evalSeq(gameState, nextSeq), nextSeq)
         }
-        val best = bestSolution ?: return Action.doNothing()
 
         for (i in 0 until nEvals) {
-            val mut = mutate(best.solution, probMutation)
+            val mut = mutate(bestSolution!!.solution, probMutation)
             val mutScore = evalSeq(gameState, mut)
-            if (mutScore >= best.score) {
+            if (mutScore >= bestSolution!!.score) {
                 bestSolution = ScoredSolution(mutScore, mut)
             }
         }
         val wrapper = GameStateWrapper(gameState, params, player)
-        val action = wrapper.getAction(gameState, best.solution[0], best.solution[1])
+        val action = wrapper.getAction(gameState, bestSolution!!.solution[0], bestSolution!!.solution[1])
         return action
     }
 
@@ -138,8 +135,6 @@ data class SimpleEvoAgent(
         }
         return p
     }
-
-    // todo: change this to use a circular buffer to avoid all the shifting
 
     private fun shiftLeftAndRandomAppend(v: FloatArray, shiftBy: Int): FloatArray {
         val p = FloatArray(v.size)

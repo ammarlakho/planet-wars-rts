@@ -10,10 +10,10 @@ import games.planetwars.core.GameParams
 import games.planetwars.core.Player
 
 fun main() {
-    val agents = SamplePlayerLists().getRandomTrio()
-//    val agents = SamplePlayerLists().getFullList()
-    agents.add(DoNothingAgent())
-    val league = RoundRobinLeague(agents, gamesPerPair = 100)
+//    val agents = SamplePlayerLists().getRandomTrio()
+    val agents = SamplePlayerLists().getFullList()
+//    agents.add(DoNothingAgent())
+    val league = RoundRobinLeague(agents, gamesPerPair = 5)
     val results = league.runRoundRobin()
     // use the League utils to print the results
     println(results)
@@ -21,6 +21,13 @@ fun main() {
     val leagueResult = LeagueResult(results.values.toList())
     val markdownContent = writer.generateMarkdownTable(leagueResult)
     writer.saveMarkdownToFile(markdownContent)
+
+    // print sorted results directly to console
+    val sortedResults = results.toList().sortedByDescending { it.second.points }.toMap()
+    for (entry in sortedResults.values) {
+        println("${entry.agentName} : ${entry.points} : ${entry.nGames}")
+    }
+
 }
 
 class SamplePlayerLists {
@@ -37,7 +44,13 @@ class SamplePlayerLists {
 //            PureRandomAgent(),
             BetterRandomAgent(),
             CarefulRandomAgent(),
-            SimpleEvoAgent(useShiftBuffer = true, nEvals = 50, sequenceLength = 200, opponentModel = PureRandomAgent()),
+            SimpleEvoAgent(
+                useShiftBuffer = true,
+                nEvals = 30,
+                sequenceLength = 400,
+                opponentModel = DoNothingAgent(),
+                probMutation = 0.8,
+            ),
         )
     }
 }

@@ -60,7 +60,7 @@ data class GameRunner(
             val winner = finalModel.getLeader()
             scores[winner] = scores[winner]!! + 1
         }
-        println(forwardModel.statusString())
+//        println(forwardModel.statusString())
 
         return scores
     }
