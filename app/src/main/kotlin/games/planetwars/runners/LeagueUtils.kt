@@ -1,6 +1,8 @@
 package games.planetwars.runners
 
 import java.io.File
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 data class LeagueEntry(
     val agentName: String,
@@ -36,13 +38,23 @@ data class LeagueWriter(
         return header + rows
     }
 
-    // Function to save the Markdown string to a file
+    // Function to save the Markdown string to a file with robust error handling
     fun saveMarkdownToFile(markdownContent: String) {
-        val dir = File(outputDir)
-        if (!dir.exists()) dir.mkdirs() // Ensure the directory exists
-        val outputFile = File(dir, filename)
+        val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"))
+        val filenameWithTimestamp = filename.replace(".md", "_$timestamp.md")
+        
+        // Get the location of the class file to find project root
+        val classLocation = LeagueWriter::class.java.protectionDomain.codeSource.location.toURI()
+        val projectRoot = File(classLocation).parentFile.parentFile.parentFile.parentFile.parentFile
+        
+        // Try to create results directory in project root
+        val resultsDir = File(projectRoot, outputDir)
+        
+        resultsDir.mkdirs()
+        val outputFile = File(resultsDir, filenameWithTimestamp)
         outputFile.writeText(markdownContent)
         println("League results saved to ${outputFile.absolutePath}")
+
     }
 }
 

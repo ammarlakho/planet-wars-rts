@@ -13,7 +13,7 @@ fun main() {
 //    val agents = SamplePlayerLists().getRandomTrio()
     val agents = SamplePlayerLists().getFullList()
 //    agents.add(DoNothingAgent())
-    val league = RoundRobinLeague(agents, gamesPerPair = 5)
+    val league = RoundRobinLeague(agents, gamesPerPair = 1)
     val results = league.runRoundRobin()
     // use the League utils to print the results
     println(results)
@@ -79,6 +79,7 @@ data class RoundRobinLeague(
                 if (i == j) {
                     continue
                 }
+                println("Running game between ${agents[i].getAgentType()} and ${agents[j].getAgentType()}")
                 val agent1 = agents[i]
                 val agent2 = agents[j]
                 val result = runPair(agent1, agent2)

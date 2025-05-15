@@ -24,6 +24,9 @@ dependencies {
     // Kotlin Standard Library
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.10")
 
+    // SLF4J Implementation
+    implementation("org.slf4j:slf4j-simple:1.7.36")
+
     // Ktor dependencies
     implementation("io.ktor:ktor-server-core:2.3.3")
     implementation("io.ktor:ktor-server-netty:2.3.3")
@@ -78,7 +81,10 @@ java {
 }
 
 application {
-    mainClass.set("client_server.MultiRTSServerKt") // Adjust this if your package structure is different
+    // mainClass.set("client_server.MultiRTSServerKt") // Adjust this if your package structure is different
+    // mainClass.set("client_server.MultiRTSServerKt") // Adjust this if your package structure is different
+    // mainClass.set("games.planetwars.view.RunVisualGameKt")
+    mainClass.set("games.planetwars.runners.RoundRobinLeague.kt")
 }
 
 kotlin {
