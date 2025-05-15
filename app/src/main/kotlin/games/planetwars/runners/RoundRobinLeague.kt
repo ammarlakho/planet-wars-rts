@@ -6,6 +6,9 @@ import games.planetwars.agents.evo.SimpleEvoAgent
 import games.planetwars.agents.random.BetterRandomAgent
 import games.planetwars.agents.random.CarefulRandomAgent
 import games.planetwars.agents.random.PureRandomAgent
+import games.planetwars.agents.strategic.StrategicHeuristicAgent
+import games.planetwars.agents.strategic.MCTSAgent
+import games.planetwars.agents.strategic.MinimaxAgent
 import games.planetwars.core.GameParams
 import games.planetwars.core.Player
 
@@ -13,7 +16,7 @@ fun main() {
 //    val agents = SamplePlayerLists().getRandomTrio()
     val agents = SamplePlayerLists().getFullList()
 //    agents.add(DoNothingAgent())
-    val league = RoundRobinLeague(agents, gamesPerPair = 1)
+    val league = RoundRobinLeague(agents, gamesPerPair = 20)
     val results = league.runRoundRobin()
     // use the League utils to print the results
     println(results)
@@ -43,14 +46,16 @@ class SamplePlayerLists {
         return mutableListOf(
 //            PureRandomAgent(),
             BetterRandomAgent(),
-            CarefulRandomAgent(),
+            // CarefulRandomAgent(),
+            // MCTSAgent(),
+            StrategicHeuristicAgent(),
             SimpleEvoAgent(
                 useShiftBuffer = true,
                 nEvals = 30,
                 sequenceLength = 400,
                 opponentModel = DoNothingAgent(),
                 probMutation = 0.8,
-            ),
+            )
         )
     }
 }
@@ -83,6 +88,7 @@ data class RoundRobinLeague(
                 val agent1 = agents[i]
                 val agent2 = agents[j]
                 val result = runPair(agent1, agent2)
+                println(result);
                 // update the league scores for each agent
                 val leagueEntry1 = scores[agent1.getAgentType()]!!
                 val leagueEntry2 = scores[agent2.getAgentType()]!!
