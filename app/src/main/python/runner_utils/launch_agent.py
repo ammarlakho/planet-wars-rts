@@ -15,6 +15,8 @@ def launch_agent(agent: AgentEntry, base_dir: Path):
     Clones to base_dir/agent.id, optionally checks out a commit, builds and runs the image.
     """
     repo_dir = base_dir / agent.id
+    gradlew_path = repo_dir / "gradlew"
+
     print(f"Launching agent: {agent.id}")
 
     # Ensure base directory exists
@@ -30,10 +32,11 @@ def launch_agent(agent: AgentEntry, base_dir: Path):
     if agent.commit:
         run_command(["git", "checkout", agent.commit], cwd=repo_dir)
 
-    # Build Kotlin project locally before container build
-    run_command(["./gradlew", "build"], cwd=repo_dir)
+    if gradlew_path.exists():
+        run_command(["./gradlew", "build"], cwd=repo_dir)
+    else:
+        raise RuntimeError(f"{gradlew_path} does not exist. Ensure the repo contains the Gradle wrapper.")
 
-    # Build Podman image
     run_command(["podman", "build", "-t", f"game-server-{agent.id}", "."], cwd=repo_dir)
 
     # Run container with exposed port
