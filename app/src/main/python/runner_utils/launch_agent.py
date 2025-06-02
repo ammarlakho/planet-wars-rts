@@ -1,42 +1,42 @@
-
 import subprocess
 from pathlib import Path
-from typing import List
-
-from runner_utils.agent_entry import AgentEntry
-
-import os
-from pathlib import Path
-
-user = os.getenv("USER", "default")
-run_id = "planetwars-run"
-base_dir = Path(f"/tmp/{user}-{run_id}")
-base_dir.mkdir(parents=True, exist_ok=True)
+from typing import Optional
+from agent_entry import AgentEntry  # Assuming AgentEntry is defined elsewhere
 
 
-def run_command(cmd: list[str], cwd: Path=None):
+def run_command(cmd: list[str], cwd: Optional[Path] = None):
     print(f"Running: {' '.join(cmd)} (in {cwd or Path.cwd()})")
     subprocess.run(cmd, check=True, cwd=cwd)
 
 
 def launch_agent(agent: AgentEntry, base_dir: Path):
+    """
+    Launches a game agent container from a GitHub repo.
+    Clones to base_dir/agent.id, optionally checks out a commit, builds and runs the image.
+    """
     repo_dir = base_dir / agent.id
+    print(f"Launching agent: {agent.id}")
+
+    # Ensure base directory exists
+    base_dir.mkdir(parents=True, exist_ok=True)
 
     # Clone if needed
     if not repo_dir.exists():
-        run_command(["git", "clone", agent.repo_url, agent.id])
+        run_command(["git", "clone", agent.repo_url, str(repo_dir)])
     else:
-        # Repo exists: make sure we fetch latest commits in case we want one
         run_command(["git", "fetch"], cwd=repo_dir)
 
-    # Checkout specified commit (always do this if provided)
+    # Always checkout specific commit if provided
     if agent.commit:
         run_command(["git", "checkout", agent.commit], cwd=repo_dir)
 
-    # Build image
+    # Build Kotlin project locally before container build
+    run_command(["./gradlew", "build"], cwd=repo_dir)
+
+    # Build Podman image
     run_command(["podman", "build", "-t", f"game-server-{agent.id}", "."], cwd=repo_dir)
 
-    # Run container
+    # Run container with exposed port
     run_command([
         "podman", "run", "-d",
         "-p", f"{agent.port}:8080",

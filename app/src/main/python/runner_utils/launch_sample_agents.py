@@ -1,7 +1,10 @@
+from pathlib import Path
+from runner_utils.agent_entry import sample_entries
+from runner_utils.launch_agent import launch_agent
 
 if __name__ == "__main__":
-    from runner_utils.agent_entry import sample_entries
-    from runner_utils.launch_agent import launch_agent, base_dir
+
+    base_dir = Path("/tmp/simonl-planetwars-run")
 
     for agent in sample_entries:
         print(f"Launching agent: {agent.id}")
