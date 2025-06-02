@@ -29,11 +29,12 @@ fun main() {
 
 }
 
-class RemoteAgent (
+class RemoteAgent(
     private val className: String,
-    private val serverUrl: String = "ws://localhost:8080/ws"
+    private val port: Int = 8080,
 ) : PlanetWarsPlayer() {
 
+    private val serverUrl: String = "ws://localhost:$port/ws"
     private lateinit var session: DefaultClientWebSocketSession
     private lateinit var client: HttpClient
     private lateinit var objectId: String
@@ -50,7 +51,7 @@ class RemoteAgent (
             client.webSocket(serverUrl) {
                 session = this
                 objectId = initAgent(className)
-                invokeRemoteMethod(objectId, "prepareToPlayAs", player, params, opponent?: "Anonymous")
+                invokeRemoteMethod(objectId, "prepareToPlayAs", player, params, opponent ?: "Anonymous")
             }
         }
         return getAgentType()

@@ -2,6 +2,7 @@ package games.planetwars.runners
 
 
 import games.planetwars.agents.Action
+import games.planetwars.agents.DoNothingAgent
 import games.planetwars.agents.PlanetWarsAgent
 import games.planetwars.agents.RemoteAgent
 import games.planetwars.agents.random.PureRandomAgent
@@ -13,15 +14,15 @@ import kotlin.system.measureTimeMillis
 
 fun main() {
     val gameParams = GameParams(numPlanets = 20)
-    val agent1 = PureRandomAgent()
-    val agent2 = RemoteAgent("games.planetwars.agents.random.CarefulRandomAgent")
+    val agent1 = DoNothingAgent()
+    val agent2 = RemoteAgent("games.planetwars.agents.random.CarefulRandomAgent", port = 9000)
     val gameRunner = GameRunnerCoRoutines(agent1, agent2, gameParams, timeoutMillis = 10)
     val finalModel = gameRunner.runGame()
     println("Game over!")
     println(finalModel.statusString())
 
     // time to run a bunch of games
-    val nGames = 5
+    val nGames = 1
     val results = gameRunner.runGames(nGames)
     println(results)
 }

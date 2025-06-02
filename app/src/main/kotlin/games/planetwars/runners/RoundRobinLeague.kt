@@ -27,7 +27,6 @@ fun main() {
     for (entry in sortedResults.values) {
         println("${entry.agentName} : ${entry.points} : ${entry.nGames}")
     }
-
 }
 
 class SamplePlayerLists {
@@ -46,7 +45,7 @@ class SamplePlayerLists {
             CarefulRandomAgent(),
             SimpleEvoAgent(
                 useShiftBuffer = true,
-                nEvals = 30,
+                nEvals = 50,
                 sequenceLength = 400,
                 opponentModel = DoNothingAgent(),
                 probMutation = 0.8,
