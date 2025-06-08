@@ -9,9 +9,9 @@ class AgentEntry(BaseModel):
 
 sample_entries: List[AgentEntry] = [
 AgentEntry(
-        id="agent1",
+        id="agent2",
         repo_url="https://github.com/SimonLucas/planet-wars-rts",
-        port=9001,
+        port=9002,
     )
 ]
 

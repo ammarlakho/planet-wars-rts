@@ -74,3 +74,10 @@ docker-compose.override.yml
 
 # Ignore temporary files by Gradle
 gradle-app.setting/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyc

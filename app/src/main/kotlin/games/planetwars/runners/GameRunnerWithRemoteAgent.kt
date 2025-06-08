@@ -13,9 +13,10 @@ import kotlin.system.measureTimeMillis
 
 
 fun main() {
-    val gameParams = GameParams(numPlanets = 20)
-    val agent1 = DoNothingAgent()
-    val agent2 = RemoteAgent("games.planetwars.agents.random.CarefulRandomAgent", port = 9000)
+    val gameParams = GameParams(numPlanets = 20, maxTicks = 2000)
+//    val agent1 = DoNothingAgent()
+    val agent1 = PureRandomAgent()
+    val agent2 = RemoteAgent("games.planetwars.agents.random.CarefulRandomAgent", port = 8765)
     val gameRunner = GameRunnerCoRoutines(agent1, agent2, gameParams, timeoutMillis = 10)
     val finalModel = gameRunner.runGame()
     println("Game over!")
