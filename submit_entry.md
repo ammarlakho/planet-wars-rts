@@ -2,7 +2,19 @@
 
 Welcome to the PlanetWars AI competition! This document describes how to package and submit your entry. Your agent should run as a WebSocket server and respond to JSON-formatted messages. Each submission must include a `Dockerfile` that builds and runs your agent.
 
-We support entries in **Kotlin/Java** or **Python**. Please follow the instructions below depending on your chosen language.
+We support entries in **Kotlin/Java** or **Python**. 
+Please follow the instructions below depending on your chosen language.
+
+Note that it's possible to develop your agent in any language, providing it can comminicate via 
+the WebSocket and handle JSON messages.
+
+Each agent runs in a server process that listens for JSON messages.  
+For Kotlin/Java and Python we provide the code to handle this, meaning you only need
+focus on the agent logic.
+
+Furthemore, the Kotlin code provides a **Forward Model** that enabling
+the use of simulation-based AI methods, such as Monte Carlo Tree Search (MCTS).
+(we may provide this in the Python version in the future).
 
 ---
 
