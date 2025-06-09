@@ -82,7 +82,22 @@ class RemoteAgent(
         }
     }
 
-    override fun getAgentType(): String = "Remote[$className]"
+//    override fun getAgentType(): String = "Remote[$className]"
+
+    override fun getAgentType(): String = runBlocking {
+        ensureConnected()
+        var agentType = "Remote[$className]" // fallback
+        client.webSocket(serverUrl) {
+            session = this
+            val response = invokeRemoteMethod(objectId, "getAgentType", args = emptyList(), logger = logger)
+            val jsonResp = json.parseToJsonElement(response).jsonObject
+            val result = jsonResp["result"]
+            if (result != null && result.toString().isNotBlank()) {
+                agentType = result.toString().trim('"')  // remove surrounding quotes
+            }
+        }
+        agentType
+    }
 
     override fun processGameOver(finalState: GameState) {
         runBlocking {

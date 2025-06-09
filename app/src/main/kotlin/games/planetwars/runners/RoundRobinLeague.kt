@@ -1,5 +1,6 @@
 package games.planetwars.runners
 
+import competition_entry.GreedyHeuristicAgent
 import games.planetwars.agents.DoNothingAgent
 import games.planetwars.agents.PlanetWarsAgent
 import games.planetwars.agents.evo.SimpleEvoAgent
@@ -10,10 +11,11 @@ import games.planetwars.core.GameParams
 import games.planetwars.core.Player
 
 fun main() {
-//    val agents = SamplePlayerLists().getRandomTrio()
-    val agents = SamplePlayerLists().getFullList()
+    val agents = SamplePlayerLists().getRandomTrio()
+    agents.add(GreedyHeuristicAgent())
+//    val agents = SamplePlayerLists().getFullList()
 //    agents.add(DoNothingAgent())
-    val league = RoundRobinLeague(agents, gamesPerPair = 5)
+    val league = RoundRobinLeague(agents, gamesPerPair = 100)
     val results = league.runRoundRobin()
     // use the League utils to print the results
     println(results)

@@ -5,6 +5,7 @@ from websockets import serve
 from typing import Dict, Any, Callable
 
 from agents.random_agents import CarefulRandomAgent
+from agents.greedy_heuristic_agent import GreedyHeuristicAgent
 from client_server.util import RemoteInvocationRequest, RemoteInvocationResponse, deserialize_args, serialize_result
 from core.game_state import Player, camel_to_snake
 
@@ -13,7 +14,7 @@ class GameServerAgent:
     def __init__(self, host: str = "localhost", port: int = 8765):
         self.host = host
         self.port = port
-        self.agent_map: Dict[str, CarefulRandomAgent] = {}
+        self.agent_map: Dict[str, GreedyHeuristicAgent] = {}
 
     async def handler(self, websocket):
         async for message in websocket:
@@ -23,7 +24,7 @@ class GameServerAgent:
 
                 if request.requestType == "init":
                     agent_id = str(uuid.uuid4())
-                    agent = CarefulRandomAgent()
+                    agent = GreedyHeuristicAgent()
                     self.agent_map[agent_id] = agent
                     result = {"objectId": agent_id}
 

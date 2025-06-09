@@ -1,6 +1,7 @@
 from __future__ import annotations  # For forward references in type hints
 
 import re
+import math
 from enum import Enum
 from typing import List, Optional, ClassVar
 from pydantic import BaseModel, Field, ConfigDict
@@ -45,9 +46,54 @@ class Player(str, Enum):
 
 # --- Data classes ---
 
+# class Vec2d(CamelModel):
+#     x: float
+#     y: float
+#
+
 class Vec2d(CamelModel):
-    x: float
-    y: float
+    x: float = Field(default=0.0)
+    y: float = Field(default=0.0)
+
+    def __add__(self, other: 'Vec2d') -> 'Vec2d':
+        return Vec2d(x=self.x + other.x, y=self.y + other.y)
+
+    def __sub__(self, other: 'Vec2d') -> 'Vec2d':
+        return Vec2d(x=self.x - other.x, y=self.y - other.y)
+
+    def __mul__(self, scalar: float) -> 'Vec2d':
+        return Vec2d(x=self.x * scalar, y=self.y * scalar)
+
+    def dot(self, other: 'Vec2d') -> float:
+        return self.x * other.x + self.y * other.y
+
+    def w_add(self, other: 'Vec2d', scalar: float) -> 'Vec2d':
+        return Vec2d(x=self.x + other.x * scalar, y=self.y + other.y * scalar)
+
+    def mag(self) -> float:
+        return math.sqrt(self.x ** 2 + self.y ** 2)
+
+    def distance(self, other: 'Vec2d') -> float:
+        return (self - other).mag()
+
+    def angle(self) -> float:
+        return math.atan2(self.y, self.x)
+
+    def rotate(self, angle: float) -> 'Vec2d':
+        cos_a = math.cos(angle)
+        sin_a = math.sin(angle)
+        return Vec2d(
+            x=self.x * cos_a - self.y * sin_a,
+            y=self.x * sin_a + self.y * cos_a
+        )
+
+    def rotated_by(self, theta: float) -> 'Vec2d':
+        return self.rotate(theta)
+
+    def normalize(self) -> 'Vec2d':
+        magnitude = self.mag()
+        return self * (1.0 / magnitude) if magnitude > 0 else self
+
 
 
 class Transporter(CamelModel):
