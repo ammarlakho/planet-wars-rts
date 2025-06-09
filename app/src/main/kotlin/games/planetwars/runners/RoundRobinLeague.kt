@@ -1,5 +1,6 @@
 package games.planetwars.runners
 
+import competition_entry.GreedyHeuristicAgent
 import games.planetwars.agents.DoNothingAgent
 import games.planetwars.agents.PlanetWarsAgent
 import games.planetwars.agents.evo.SimpleEvoAgent
@@ -7,16 +8,15 @@ import games.planetwars.agents.random.BetterRandomAgent
 import games.planetwars.agents.random.CarefulRandomAgent
 import games.planetwars.agents.random.PureRandomAgent
 import games.planetwars.agents.strategic.StrategicHeuristicAgent
-import games.planetwars.agents.strategic.MCTSAgent
-import games.planetwars.agents.strategic.MinimaxAgent
 import games.planetwars.core.GameParams
 import games.planetwars.core.Player
 
 fun main() {
-//    val agents = SamplePlayerLists().getRandomTrio()
-    val agents = SamplePlayerLists().getFullList()
+    val agents = SamplePlayerLists().getRandomTrio()
+    agents.add(GreedyHeuristicAgent())
+//    val agents = SamplePlayerLists().getFullList()
 //    agents.add(DoNothingAgent())
-    val league = RoundRobinLeague(agents, gamesPerPair = 20)
+    val league = RoundRobinLeague(agents, gamesPerPair = 100)
     val results = league.runRoundRobin()
     // use the League utils to print the results
     println(results)
@@ -30,7 +30,6 @@ fun main() {
     for (entry in sortedResults.values) {
         println("${entry.agentName} : ${entry.points} : ${entry.nGames}")
     }
-
 }
 
 class SamplePlayerLists {
@@ -46,16 +45,15 @@ class SamplePlayerLists {
         return mutableListOf(
 //            PureRandomAgent(),
             BetterRandomAgent(),
-            // CarefulRandomAgent(),
-            // MCTSAgent(),
+            CarefulRandomAgent(),
             StrategicHeuristicAgent(),
             SimpleEvoAgent(
                 useShiftBuffer = true,
-                nEvals = 30,
+                nEvals = 50,
                 sequenceLength = 400,
                 opponentModel = DoNothingAgent(),
                 probMutation = 0.8,
-            )
+            ),
         )
     }
 }

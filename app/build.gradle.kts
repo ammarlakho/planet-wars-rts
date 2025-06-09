@@ -81,10 +81,7 @@ java {
 }
 
 application {
-    // mainClass.set("client_server.MultiRTSServerKt") // Adjust this if your package structure is different
-    // mainClass.set("client_server.MultiRTSServerKt") // Adjust this if your package structure is different
-    // mainClass.set("games.planetwars.view.RunVisualGameKt")
-    mainClass.set("games.planetwars.runners.RoundRobinLeague.kt")
+    mainClass.set("competition_entry.RunEntryAsServerKt") // Adjust this if your package structure is different
 }
 
 kotlin {
